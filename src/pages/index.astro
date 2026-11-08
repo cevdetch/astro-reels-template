@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../config.ts';
+import { homeJsonLd } from '../lib/identity.ts';
+import { SITE_NAME, TAGLINE } from '../lib/seo.ts';
+
+if (!Astro.site) throw new Error('Set the origin in src/config.ts.');
+---
+
+<Layout description={siteConfig.description} jsonLd={homeJsonLd(Astro.site)}>
+  <h1>{SITE_NAME}</h1>
+  <p>{TAGLINE}</p>
+</Layout>
