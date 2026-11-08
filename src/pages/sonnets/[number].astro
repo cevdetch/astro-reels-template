@@ -1,0 +1,22 @@
+---
+import SonnetCard from '../../components/SonnetCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { sonnetJsonLd } from '../../lib/identity.ts';
+import { getSonnets, sonnetPath, type Sonnet } from '../../lib/sonnets.ts';
+import '../../styles/feed.css';
+
+export async function getStaticPaths() {
+  const sonnets = await getSonnets();
+  return sonnets.map((sonnet) => ({ params: { number: String(sonnet.data.number) }, props: { sonnet, total: sonnets.length } }));
+}
+
+interface Props { sonnet: Sonnet; total: number }
+const { sonnet, total } = Astro.props;
+if (!Astro.site) throw new Error('Set the origin in src/config.ts.');
+const { title, description, number } = sonnet.data;
+const jsonLd = sonnetJsonLd({ url: new URL(sonnetPath(number), Astro.site).href, name: title, description });
+---
+
+<Layout title={title} description={description} ogType="article" jsonLd={jsonLd}>
+  <SonnetCard sonnet={sonnet} total={total} level="h1" context="page" />
+</Layout>

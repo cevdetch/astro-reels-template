@@ -1,0 +1,52 @@
+@layer layout {
+  .visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  /* One card per screen; the browser's own keys and wheel move card by card. */
+  html:has(body.feed) { scroll-snap-type: y mandatory; scroll-padding-block: env(safe-area-inset-top) env(safe-area-inset-bottom); }
+  body.feed header.site { position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 1; max-inline-size: none; background: color-mix(in srgb, var(--bg) 88%, transparent); }
+  body.feed main { max-inline-size: none; padding: 0; }
+
+  .card {
+    display: grid; place-items: center;
+    min-block-size: 100dvh; padding: 4.5rem 1.5rem 3rem; box-sizing: border-box;
+    scroll-snap-align: start; scroll-snap-stop: always;
+    content-visibility: auto; contain-intrinsic-size: auto 100dvh;
+  }
+  .card + .card { border-block-start: 1px solid var(--rule); }
+
+  .poem { max-inline-size: 34rem; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+  .number { margin: 0 0 1rem; color: var(--muted); font-size: 1rem; font-weight: 400; letter-spacing: 0.08em; }
+  /* Sized to the screen so a sonnet's 40-50 character lines mostly fit whole on a phone. */
+  .verse { font-size: clamp(0.875rem, 3.85vw, 1.3rem); line-height: 1.7; }
+  .verse p { margin: 0; }
+  .verse p + p { margin-block-start: 1em; }
+  /* Verse typesetting: a line that wraps continues with a hanging indent, so the remainder never
+     reads as a new line; indented lines (the couplets) sit further in. */
+  .line { display: block; padding-inline-start: 1.5em; text-indent: -1.5em; }
+  .line.indent { padding-inline-start: 3.5em; }
+  .card-links { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-block-start: 1.75rem; font-family: system-ui, sans-serif; font-size: 0.9rem; }
+  .card-links a { color: var(--muted); }
+  .intro h1 { margin: 0 0 0.5rem; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }
+  .hint { color: var(--muted); font-family: system-ui, sans-serif; font-size: 0.9rem; }
+  .next a, .previous a { font-size: 1.25rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:has(body.feed) { scroll-snap-type: y proximity; }
+  }
+
+  @media (max-width: 30rem) {
+    .card { padding-inline: 1rem; }
+  }
+
+  /* Short screens (small phones, landscape): a little more room so even the 15-line sonnet 99 fits. */
+  @media (max-height: 780px) {
+    .card { padding-block: 4rem 2rem; }
+    .verse { line-height: 1.55; }
+  }
+}
+
+/* Page turns cross-fade instead of flashing; browsers without support load normally. */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}

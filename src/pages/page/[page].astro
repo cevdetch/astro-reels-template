@@ -1,0 +1,21 @@
+---
+import FeedPage from '../../components/FeedPage.astro';
+import Layout from '../../layouts/Layout.astro';
+import { pageCount, pageRange } from '../../lib/feed.ts';
+import { getSonnets, type Sonnet } from '../../lib/sonnets.ts';
+import '../../styles/feed.css';
+
+export async function getStaticPaths() {
+  const sonnets = await getSonnets();
+  return Array.from({ length: pageCount(sonnets.length) - 1 }, (_, i) => ({ params: { page: String(i + 2) }, props: { sonnets } }));
+}
+
+interface Props { sonnets: Sonnet[] }
+const { sonnets } = Astro.props;
+const page = Number(Astro.params.page);
+const { first, last } = pageRange(page, sonnets.length);
+---
+
+<Layout title={`Page ${page}: ${first}–${last}`} description={`Sonnets ${first} to ${last} of Shakespeare's ${sonnets.length}, one per screen.`} bodyClass="feed">
+  <FeedPage page={page} sonnets={sonnets} />
+</Layout>

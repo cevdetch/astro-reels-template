@@ -1,13 +1,15 @@
 ---
+import FeedPage from '../components/FeedPage.astro';
 import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../config.ts';
 import { homeJsonLd } from '../lib/identity.ts';
-import { SITE_NAME, TAGLINE } from '../lib/seo.ts';
+import { getSonnets } from '../lib/sonnets.ts';
+import '../styles/feed.css';
 
 if (!Astro.site) throw new Error('Set the origin in src/config.ts.');
+const sonnets = await getSonnets();
 ---
 
-<Layout description={siteConfig.description} jsonLd={homeJsonLd(Astro.site)}>
-  <h1>{SITE_NAME}</h1>
-  <p>{TAGLINE}</p>
+<Layout description={siteConfig.description} jsonLd={homeJsonLd(Astro.site)} bodyClass="feed">
+  <FeedPage page={1} sonnets={sonnets} />
 </Layout>

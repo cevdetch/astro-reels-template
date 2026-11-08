@@ -47,7 +47,7 @@ const jsonLd = Astro.props.jsonLd?.replace(/</g, '\\u003c');
     )}
     {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
   </head>
-  <body>
+  <body class={Astro.props.bodyClass}>
     <header class="site">
       <nav aria-label="Primary"><a href="/">{SITE_NAME}</a></nav>
     </header>

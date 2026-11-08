@@ -1,0 +1,36 @@
+---
+import { feedHref, pageHref, pageOf } from '../lib/feed.ts';
+import { sonnetPath, type Sonnet } from '../lib/sonnets.ts';
+import { stanzas } from '../lib/verse.ts';
+
+interface Props { sonnet: Sonnet; total: number; level?: 'h1' | 'h2'; context: 'feed' | 'page' }
+const { sonnet, total, level = 'h2', context } = Astro.props;
+const n = sonnet.data.number;
+const verse = stanzas(sonnet.body ?? '');
+const Heading = level;
+const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : pageHref(pageOf(n + 1))) : undefined;
+---
+
+<section class="card sonnet" id={context === 'feed' ? String(n) : undefined} aria-labelledby={`sonnet-${n}`}>
+  <div class="poem">
+    <Heading class="number" id={`sonnet-${n}`}><span class="visually-hidden">Sonnet </span>{n}</Heading>
+    <div class="verse">
+      {verse.map((stanza) => (
+        <p>{stanza.map((line) => <span class:list={['line', { indent: line.indent }]}>{line.text}</span>)}</p>
+      ))}
+    </div>
+    {context === 'feed' && (
+      <nav class="card-links" aria-label={`Sonnet ${n}`}>
+        {next && <a href={next}>Next</a>}
+        <a href={sonnetPath(n)}>Open</a>
+      </nav>
+    )}
+    {context === 'page' && (
+      <nav class="card-links" aria-label="More sonnets">
+        {n > 1 && <a href={sonnetPath(n - 1)} rel="prev">← Sonnet {n - 1}</a>}
+        <a href={feedHref(n)}>See it in the feed</a>
+        {n < total && <a href={sonnetPath(n + 1)} rel="next">Sonnet {n + 1} →</a>}
+      </nav>
+    )}
+  </div>
+</section>

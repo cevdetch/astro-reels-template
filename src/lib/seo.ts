@@ -21,6 +21,8 @@ export interface LayoutProps {
   ogType?: 'website' | 'article';
   publishedTime?: Date;
   modifiedTime?: Date;
+  /** Class on <body>, e.g. "feed" for scroll-snap pages. */
+  bodyClass?: string;
 }
 
 export interface SeoContext {

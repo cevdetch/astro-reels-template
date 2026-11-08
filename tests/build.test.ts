@@ -70,3 +70,75 @@ test('the home page declares the WebSite', () => {
   assert.equal(site['@type'], 'WebSite');
   assert.equal(site['name'], SITE_NAME);
 });
+
+import { readdirSync } from 'node:fs';
+
+const scriptsOtherThanJsonLd = (html: string) => [...html.matchAll(/<script\b[^>]*>/g)].filter((m) => !/type="application\/ld\+json"/.test(m[0]));
+const allHtml = (dir: URL): URL[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+  e.isDirectory() ? allHtml(new URL(`${e.name}/`, dir)) : e.name.endsWith('.html') ? [new URL(e.name, dir)] : []);
+
+test('8 feed pages and 154 sonnet pages are built', () => {
+  for (let p = 2; p <= 8; p++) assert.ok(existsSync(new URL(`page/${p}/index.html`, dist)), `page ${p}`);
+  assert.ok(!existsSync(new URL('page/9/index.html', dist)));
+  assert.ok(!existsSync(new URL('page/1/index.html', dist)));
+  for (const n of [1, 18, 99, 126, 154]) assert.ok(existsSync(new URL(`sonnets/${n}/index.html`, dist)), `sonnet ${n}`);
+  assert.ok(!existsSync(new URL('sonnets/155/index.html', dist)));
+});
+
+test('feed page 1: intro card, sonnets 1-20 with ids, a next card, no previous card', () => {
+  const html = read('index.html');
+  const ids = [...html.matchAll(/<section class="card sonnet" id="(\d+)"/g)].map((m) => Number(m[1]));
+  assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => i + 1));
+  assert.match(html, /class="card intro"/);
+  assert.match(html, /<a href="\/page\/2\/"[^>]*>Next: sonnets 21–40/);
+  assert.doesNotMatch(html, /class="card previous"/);
+});
+
+test('feed page 8: sonnets 141-154, a previous card, no next card, a self canonical', () => {
+  const html = read('page/8/index.html');
+  const ids = [...html.matchAll(/<section class="card sonnet" id="(\d+)"/g)].map((m) => Number(m[1]));
+  assert.deepEqual(ids, Array.from({ length: 14 }, (_, i) => i + 141));
+  assert.match(html, /class="card previous"/);
+  assert.doesNotMatch(html, /class="card next"/);
+  assert.match(html, new RegExp(`<link rel="canonical" href="${esc(origin)}/page/8/">`));
+  assert.match(read('page/2/index.html'), new RegExp(`<title>Page 2: 21–40 - ${esc(SITE_NAME)}</title>`));
+});
+
+test('a sonnet page: title, first-line description, couplet indentation, neighbours and the feed link', () => {
+  const html = read('sonnets/18/index.html');
+  assert.match(html, new RegExp(`<title>Sonnet 18 - ${esc(SITE_NAME)}</title>`));
+  assert.match(html, /<meta name="description" content="Shall I compare thee to a summer’s day\?">/);
+  assert.match(html, /<span class="line indent">So long as men can breathe, or eyes can see,<\/span>/);
+  assert.match(html, /<span class="line">Shall I compare thee to a summer’s day\?<\/span>/);
+  assert.match(html, /href="\/sonnets\/17\/"/);
+  assert.match(html, /href="\/sonnets\/19\/"/);
+  assert.match(html, /href="\/#18"/);
+  assert.match(read('sonnets/25/index.html'), /href="\/page\/2\/#25"/);
+  assert.doesNotMatch(read('sonnets/1/index.html'), /href="\/sonnets\/0\/"/);
+  assert.doesNotMatch(read('sonnets/154/index.html'), /href="\/sonnets\/155\/"/);
+});
+
+test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {
+  const ld = JSON.parse(read('sonnets/18/index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s)![1]!) as Record<string, unknown>;
+  assert.equal(ld['@type'], 'CreativeWork');
+  assert.equal(ld['name'], 'Sonnet 18');
+  assert.deepEqual(ld['author'], { '@type': 'Person', name: 'William Shakespeare' });
+  assert.deepEqual(ld['isPartOf'], { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' });
+});
+
+test('no page ships JavaScript', () => {
+  for (const file of allHtml(dist)) assert.deepEqual(scriptsOtherThanJsonLd(readFileSync(file, 'utf8')), [], file.pathname);
+});
+
+test('the sitemap lists every feed page and every sonnet', () => {
+  const xml = read('sitemap-0.xml');
+  assert.match(xml, new RegExp(`<loc>${esc(origin)}/page/8/</loc>`));
+  assert.match(xml, new RegExp(`<loc>${esc(origin)}/sonnets/154/</loc>`));
+  assert.equal([...xml.matchAll(/<loc>/g)].length, 1 + 7 + 154);
+});
+
+test('the intro card takes its line and source credit from the config', () => {
+  const html = read('index.html');
+  assert.match(html, new RegExp(`<p>${esc(siteConfig.intro.replace(/'/g, '&#39;'))}</p>|<p>${esc(siteConfig.intro)}</p>`));
+  assert.match(html, new RegExp(`<a href="${esc(siteConfig.credit.href)}"[^>]*>${esc(siteConfig.credit.text)}</a>`));
+});

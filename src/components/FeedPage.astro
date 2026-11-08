@@ -1,0 +1,41 @@
+---
+import SonnetCard from './SonnetCard.astro';
+import { siteConfig } from '../config.ts';
+import { pageCount, pageHref, pageRange, PAGE_SIZE } from '../lib/feed.ts';
+import type { Sonnet } from '../lib/sonnets.ts';
+import '../styles/feed.css';
+
+interface Props { page: number; sonnets: Sonnet[] }
+const { page, sonnets } = Astro.props;
+const total = sonnets.length;
+const pages = pageCount(total);
+const { first, last } = pageRange(page, total);
+const shown = sonnets.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+const before = page > 1 ? pageRange(page - 1, total) : undefined;
+const after = page < pages ? pageRange(page + 1, total) : undefined;
+---
+
+<div class="feed">
+  {page === 1 && (
+    <section class="card intro" aria-labelledby="intro-title">
+      <div class="poem">
+        <h1 id="intro-title">{siteConfig.name}</h1>
+        <p>{siteConfig.intro}</p>
+        <p class="hint">Scroll, or press ↓, Page Down or Space.</p>
+        <p class="hint"><a href={siteConfig.credit.href}>{siteConfig.credit.text}</a></p>
+      </div>
+    </section>
+  )}
+  {page > 1 && before && (
+    <section class="card previous" aria-label="Previous sonnets">
+      <h1 class="visually-hidden">{siteConfig.name}: sonnets {first}–{last}</h1>
+      <a href={pageHref(page - 1)} rel="prev">← Previous: sonnets {before.first}–{before.last}</a>
+    </section>
+  )}
+  {shown.map((sonnet) => <SonnetCard sonnet={sonnet} total={total} context="feed" />)}
+  {after && (
+    <section class="card next" aria-label="Next sonnets">
+      <a href={pageHref(page + 1)} rel="next">Next: sonnets {after.first}–{after.last} →</a>
+    </section>
+  )}
+</div>

@@ -9,3 +9,17 @@ export function homeJsonLd(origin: URL): string {
     url: new URL('/', origin).href,
   });
 }
+
+export function sonnetJsonLd(input: { url: string; name: string; description: string }): string {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${input.url}#work`,
+    name: input.name,
+    description: input.description,
+    inLanguage: 'en',
+    url: input.url,
+    author: { '@type': 'Person', name: 'William Shakespeare' },
+    isPartOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
+  });
+}
