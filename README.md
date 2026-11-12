@@ -101,6 +101,39 @@ static hosts such as Cloudflare Pages, Netlify and GitHub Pages serve from `inde
 Set `origin` in `src/config.ts` to the production address first: canonicals, the sitemap and
 share images use it.
 
+## SEO checklist
+
+What the template does for search:
+
+- Every page has one title: `<Page> · <Site>`, or `<Site>: <tagline>` on the home page.
+- Every page has a description of up to 160 characters (longer ones fail the build), a
+  self-referencing canonical in the trailing-slash form, Open Graph tags, a 1200×630 share image
+  and `twitter:card`.
+- The home page carries `WebSite` structured data with the author as publisher; each piece's page
+  carries `CreativeWork`.
+- `robots.txt` allows crawling and names the sitemap index. The sitemap lists only pages meant for
+  search.
+- The 404 page is served as `404.html`, `noindex` and without a canonical.
+- Every page reads in full without JavaScript, and `pnpm lint:html` audits the built HTML.
+
+The index option, `indexPieces` in `src/config.ts`:
+
+- `false` (the default, for demo text or text published elsewhere): each piece's page and the
+  feed pages after the first carry `noindex, follow` and stay out of the sitemap. Only the home
+  page is indexed, so it needs words of its own: the welcome cards.
+- `true` (for your own pieces): every page except the 404 is indexed and listed in the sitemap.
+
+What a fork must set before launch:
+
+1. `origin` in `src/config.ts`: canonicals, the sitemap, `robots.txt` and share images use it.
+2. `name`, `tagline` and `description`, written for the people searching for your site.
+3. `author` and `repository`, or remove them.
+4. `indexPieces`, as above.
+5. The welcome cards in `src/components/Intro.astro`, and the pieces' author in
+   `src/lib/identity.ts`.
+6. Run `pnpm verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
+   Webmaster Tools.
+
 ## Acknowledgements
 
 - *Shakespeare's Sonnets* (1609), text from [Project Gutenberg](https://www.gutenberg.org/ebooks/1041),
