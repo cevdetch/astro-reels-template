@@ -31,7 +31,7 @@ const jsonLd = Astro.props.jsonLd?.replace(/</g, '\\u003c');
 
     {seo.canonicalUrl && <link rel="canonical" href={seo.canonicalUrl} />}
     <meta name="description" content={seo.description} />
-    {seo.noindex && <meta name="robots" content="noindex" />}
+    {seo.robots && <meta name="robots" content={seo.robots} />}
     {seo.social && (
       <>
         <meta property="og:site_name" content={SITE_NAME} />

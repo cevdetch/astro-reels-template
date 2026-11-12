@@ -45,10 +45,19 @@ test('robots.txt allows crawling and names the sitemap index', () => {
   assert.equal(read('robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap-index.xml\n`);
 });
 
-test('the sitemap lists the home page without unused namespaces', () => {
+test('the sitemap lists only the home page, without unused namespaces', () => {
   const xml = read('sitemap-0.xml');
-  assert.match(xml, new RegExp(`<loc>${esc(origin)}/</loc>`));
+  assert.deepEqual([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]), [`${origin}/`]);
   assert.doesNotMatch(xml, /xmlns:(news|image|video|xhtml)/);
+});
+
+test('only the home page is indexable; piece and later feed pages are noindex, follow', () => {
+  assert.doesNotMatch(read('index.html'), /<meta name="robots"/);
+  for (const path of ['page/2/index.html', 'page/8/index.html', 'sonnets/1/index.html', 'sonnets/154/index.html']) {
+    const html = read(path);
+    assert.match(html, /<meta name="robots" content="noindex, follow">/, path);
+    assert.match(html, /<link rel="canonical" href=/, path);
+  }
 });
 
 test('indexable pages carry Open Graph tags and a 1200x630 share image', async () => {
@@ -128,13 +137,6 @@ test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 S
 
 test('no page ships JavaScript', () => {
   for (const file of allHtml(dist)) assert.deepEqual(scriptsOtherThanJsonLd(readFileSync(file, 'utf8')), [], file.pathname);
-});
-
-test('the sitemap lists every feed page and every sonnet', () => {
-  const xml = read('sitemap-0.xml');
-  assert.match(xml, new RegExp(`<loc>${esc(origin)}/page/8/</loc>`));
-  assert.match(xml, new RegExp(`<loc>${esc(origin)}/sonnets/154/</loc>`));
-  assert.equal([...xml.matchAll(/<loc>/g)].length, 1 + 7 + 154);
 });
 
 test('the intro card takes its line and source credit from the config', () => {

@@ -6,6 +6,19 @@ export const TAGLINE = siteConfig.tagline;
 export const SEPARATOR = ' · ';
 export const HOME_TITLE = `${SITE_NAME}: ${TAGLINE}`;
 export const MAX_DESCRIPTION = 160;
+/** Where the piece pages live; the routes are in src/pages/sonnets/. */
+export const PIECES_PATH = '/sonnets/';
+
+/**
+ * Whether search engines should index the page at this path: everything except the 404 page,
+ * unless `indexPieces` in src/config.ts is false, which also keeps out the piece pages and the feed
+ * pages after the first. The robots meta tag and the sitemap both follow it.
+ */
+export function inSearch(pathname: string): boolean {
+  if (/\/404(?:\.html|\/)?$/.test(pathname)) return false;
+  if (siteConfig.indexPieces) return true;
+  return !pathname.startsWith(PIECES_PATH) && !pathname.startsWith(`${siteConfig.feedBase}page/`);
+}
 
 export type Direction = 'ltr' | 'rtl' | 'auto';
 export interface PagePolicy { pathname: string; noindex: boolean }
@@ -14,6 +27,7 @@ export interface LayoutProps {
   /** Omit on the home page; every other page's title gets the site name appended. */
   title?: string;
   description: string;
+  /** For pages that should not exist, such as the 404 page: noindex, with no canonical or share image. */
   noindex?: boolean;
   /** Serialized JSON-LD for this page, rendered as-is. */
   jsonLd?: string;
@@ -38,6 +52,8 @@ export interface ResolvedSeo {
   description: string;
   canonicalUrl?: string;
   noindex: boolean;
+  /** The robots meta tag, when the page is kept out of search. */
+  robots?: 'noindex' | 'noindex, follow';
   social?: { url: string; imageUrl: string };
   generatedImageUrl?: string;
 }
@@ -87,7 +103,12 @@ export async function resolveSeo(props: LayoutProps, ctx: SeoContext): Promise<R
   }
   const noindex = props.noindex === true;
   const seo: ResolvedSeo = { title, ogTitle: pageTitle ?? SITE_NAME, description, noindex };
-  if (noindex) return seo;
+  if (noindex) {
+    seo.robots = 'noindex';
+    return seo;
+  }
+  // Kept out of search but still a real page: its canonical and share image stay, and links on it are followed.
+  if (!inSearch(ctx.pathname)) seo.robots = 'noindex, follow';
   if (!ctx.pathname.endsWith('/')) throw new Error(`canonical path must end with a trailing slash (got ${ctx.pathname}).`);
   const canonicalUrl = new URL(ctx.pathname, ctx.site).href;
   seo.canonicalUrl = canonicalUrl;
