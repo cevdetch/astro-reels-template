@@ -1,4 +1,5 @@
 ---
+import Intro from './Intro.astro';
 import SonnetCard from './SonnetCard.astro';
 import { siteConfig } from '../config.ts';
 import { pageCount, pageHref, pageRange, PAGE_SIZE } from '../lib/feed.ts';
@@ -16,16 +17,7 @@ const after = page < pages ? pageRange(page + 1, total) : undefined;
 ---
 
 <div class="feed">
-  {page === 1 && (
-    <section class="card intro" aria-labelledby="intro-title">
-      <div class="poem">
-        <h1 id="intro-title">{siteConfig.name}</h1>
-        <p>{siteConfig.intro}</p>
-        <p class="hint">Scroll, or press ↓, Page Down or Space.</p>
-        <p class="hint"><a href={siteConfig.credit.href}>{siteConfig.credit.text}</a></p>
-      </div>
-    </section>
-  )}
+  {page === 1 && <Intro />}
   {page > 1 && before && (
     <section class="card previous" aria-label="Previous sonnets">
       <h1 class="visually-hidden">{siteConfig.name}: sonnets {first}–{last}</h1>

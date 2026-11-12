@@ -8,16 +8,16 @@ const ctx = (pathname: string, extra: Partial<SeoContext> = {}): SeoContext =>
 
 test('the home page title is the site name, a colon and the tagline', async () => {
   const seo = await resolveSeo({ description: 'A description.' }, ctx('/'));
-  assert.equal(SITE_NAME, 'Sonnets');
-  assert.equal(HOME_TITLE, "Sonnets: Shakespeare's sonnets, one at a time");
+  assert.equal(SITE_NAME, 'Astro Reels Template');
+  assert.equal(HOME_TITLE, 'Astro Reels Template: a vertical feed with zero JavaScript');
   assert.equal(seo.title, HOME_TITLE);
   assert.equal(seo.ogTitle, SITE_NAME);
   assert.equal(seo.canonicalUrl, 'https://example.test/');
 });
 
-test('other pages lead with their title, end in " · Sonnets" and get a self canonical', async () => {
+test('other pages lead with their title, end in " · <site name>" and get a self canonical', async () => {
   const seo = await resolveSeo({ title: 'About', description: 'About this site.' }, ctx('/about/'));
-  assert.equal(seo.title, 'About · Sonnets');
+  assert.equal(seo.title, 'About · Astro Reels Template');
   assert.equal(seo.robots, undefined);
   assert.equal(seo.ogTitle, 'About');
   assert.equal(seo.canonicalUrl, 'https://example.test/about/');
