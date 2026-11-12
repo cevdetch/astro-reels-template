@@ -1,5 +1,5 @@
 // Everything a template user changes lives here (plus the icons in public/).
-export const siteConfig = {
+export const siteConfig: SiteConfig = {
   name: 'Sonnets',
   tagline: "Shakespeare's sonnets, one at a time",
   description: "All 154 of Shakespeare's sonnets in a reels-style feed: one sonnet per screen, readable without JavaScript.",
@@ -17,5 +17,27 @@ export const siteConfig = {
    * true when the pieces are your own.
    */
   indexPieces: false,
+  /**
+   * Who publishes the site: credited in every page's footer and named as the publisher in the home
+   * page's structured data. Leave it out to show neither.
+   */
+  author: { name: 'Cevdet', url: 'https://cevdet.ch/' },
+  /** The source code, linked from the footer. Leave it out to drop the link. */
+  repository: 'https://github.com/cevdetch/astro-reels-template',
   socialImages: true,
-} as const;
+};
+
+export interface SiteConfig {
+  name: string;
+  tagline: string;
+  description: string;
+  origin: string;
+  feedBase: string;
+  intro: string;
+  credit: { text: string; href: string };
+  indexPieces: boolean;
+  /** `url` is your home page; its `#person` is the publisher's identifier in the structured data. */
+  author?: { name: string; url?: string };
+  repository?: string;
+  socialImages: boolean;
+}

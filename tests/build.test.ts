@@ -72,12 +72,22 @@ test('indexable pages carry Open Graph tags and a 1200x630 share image', async (
   assert.equal(info.height, 630);
 });
 
-test('the home page declares the WebSite', () => {
+test('the home page declares the WebSite and its publisher', () => {
   const script = read('index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s);
   assert.ok(script);
-  const site = JSON.parse(script[1]!) as Record<string, string>;
+  const site = JSON.parse(script[1]!) as Record<string, unknown>;
   assert.equal(site['@type'], 'WebSite');
   assert.equal(site['name'], SITE_NAME);
+  assert.deepEqual(site['publisher'], { '@type': 'Person', '@id': 'https://cevdet.ch/#person', name: 'Cevdet', url: 'https://cevdet.ch/' });
+});
+
+test('every page ends with the author and source credit from the config', () => {
+  const { author, repository } = siteConfig;
+  assert.ok(author?.url && repository);
+  for (const path of ['index.html', 'page/8/index.html', 'sonnets/18/index.html', '404.html']) {
+    const footer = read(path).match(/<footer class="site">(.*?)<\/footer>/s)?.[1];
+    assert.equal(footer, `<p>By <a href="${author.url}">${author.name}</a> · <a href="${repository}">Source code</a></p>`, path);
+  }
 });
 
 import { readdirSync } from 'node:fs';

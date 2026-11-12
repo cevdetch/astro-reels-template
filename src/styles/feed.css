@@ -5,6 +5,8 @@
   html:has(body.feed) { scroll-snap-type: y mandatory; scroll-padding-block: env(safe-area-inset-top) env(safe-area-inset-bottom); }
   body.feed header.site { position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 1; max-inline-size: none; background: color-mix(in srgb, var(--bg) 88%, transparent); }
   body.feed main { max-inline-size: none; padding: 0; }
+  /* The footer follows the last card and snaps to the bottom of the screen. */
+  body.feed footer.site { scroll-snap-align: end; border-block-start: 1px solid var(--rule); max-inline-size: none; text-align: center; }
 
   .card {
     display: grid; place-items: center;

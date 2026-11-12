@@ -20,7 +20,10 @@
 }
 
 @layer layout {
-  header.site, main { max-inline-size: 42rem; margin-inline: auto; padding-inline: 1.5rem; }
+  header.site, main, footer.site { max-inline-size: 42rem; margin-inline: auto; padding-inline: 1.5rem; }
   header.site nav { display: flex; gap: 1.25rem; padding-block: 1.25rem; }
   header.site a { font-weight: 700; text-decoration: none; }
+  footer.site { padding-block: 2rem; color: var(--muted); font-size: 0.9rem; }
+  footer.site p { margin: 0; }
+  footer.site a { color: var(--muted); }
 }

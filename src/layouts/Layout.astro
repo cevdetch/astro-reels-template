@@ -15,6 +15,7 @@ const seo = await resolveSeo(Astro.props, {
 const { ogType = 'website', publishedTime, modifiedTime } = Astro.props;
 // A "<" in the data must not end the script element early.
 const jsonLd = Astro.props.jsonLd?.replace(/</g, '\\u003c');
+const { author, repository } = siteConfig;
 ---
 
 <!doctype html>
@@ -52,5 +53,14 @@ const jsonLd = Astro.props.jsonLd?.replace(/</g, '\\u003c');
       <nav aria-label="Primary"><a href="/">{SITE_NAME}</a></nav>
     </header>
     <main id="main"><slot /></main>
+    {(author || repository) && (
+      <footer class="site">
+        <p>
+          {author && <>By {author.url ? <a href={author.url}>{author.name}</a> : author.name}</>}
+          {author && repository && ' · '}
+          {repository && <a href={repository}>Source code</a>}
+        </p>
+      </footer>
+    )}
   </body>
 </html>

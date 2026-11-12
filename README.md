@@ -48,7 +48,9 @@ share sheet; each piece's own page is the link to share.
 
 1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`,
    the line and credit on the first card, and `feedBase` if the feed should live somewhere other
-   than `/`.
+   than `/`. Set `author` to yourself and `repository` to your source code: the footer of every
+   page credits both, and the home page's `WebSite` structured data names the author as its
+   publisher. Either can be left out.
 2. **Search.** `indexPieces` in `src/config.ts` is `false`, which suits demo text or text that is
    already published elsewhere, such as the sonnets: each piece's page and the feed pages after
    the first carry `<meta name="robots" content="noindex, follow">` and are left out of the
@@ -76,8 +78,8 @@ share sheet; each piece's own page is the link to share.
 5. **Words.** The section is called `sonnets` in the content folder, `src/content.config.ts`,
    the routes under `src/pages/sonnets/`, `src/lib/sonnets.ts` and `PIECES_PATH` in
    `src/lib/seo.ts`. The share-image label lives in `SECTIONS` in `src/lib/social-card.ts`, and
-   the author in the structured data in `src/lib/identity.ts`. Rename them together for your own
-   kind of piece.
+   the pieces' author in their structured data in `src/lib/identity.ts`. Rename them together for
+   your own kind of piece.
 6. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
 
 ## Deploy
