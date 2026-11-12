@@ -56,7 +56,7 @@ test('indexable pages carry Open Graph tags and a 1200x630 share image', async (
   const hash = createHash('sha256').update('/').digest('hex');
   assert.match(html, new RegExp(`<meta property="og:image" content="${esc(origin)}/_social/${hash}\\.png">`));
   assert.match(html, new RegExp(`<meta property="og:site_name" content="${esc(SITE_NAME)}">`));
-  assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
+  assert.match(html, /<meta property="og:image" content="[^"]+"><meta name="twitter:card" content="summary_large_image">/);
   assert.doesNotMatch(html, /og:image:(width|height)|data-starter-/);
   const { info } = await sharp(readFileSync(new URL(`_social/${hash}.png`, dist))).raw().toBuffer({ resolveWithObject: true });
   assert.equal(info.width, 1200);
@@ -101,12 +101,12 @@ test('feed page 8: sonnets 141-154, a previous card, no next card, a self canoni
   assert.match(html, /class="card previous"/);
   assert.doesNotMatch(html, /class="card next"/);
   assert.match(html, new RegExp(`<link rel="canonical" href="${esc(origin)}/page/8/">`));
-  assert.match(read('page/2/index.html'), new RegExp(`<title>Page 2: 21–40 - ${esc(SITE_NAME)}</title>`));
+  assert.match(read('page/2/index.html'), new RegExp(`<title>Page 2: 21–40 · ${esc(SITE_NAME)}</title>`));
 });
 
 test('a sonnet page: title, first-line description, couplet indentation, neighbours and the feed link', () => {
   const html = read('sonnets/18/index.html');
-  assert.match(html, new RegExp(`<title>Sonnet 18 - ${esc(SITE_NAME)}</title>`));
+  assert.match(html, new RegExp(`<title>Sonnet 18 · ${esc(SITE_NAME)}</title>`));
   assert.match(html, /<meta name="description" content="Shall I compare thee to a summer’s day\?">/);
   assert.match(html, /<span class="line indent">So long as men can breathe, or eyes can see,<\/span>/);
   assert.match(html, /<span class="line">Shall I compare thee to a summer’s day\?<\/span>/);

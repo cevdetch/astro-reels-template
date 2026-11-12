@@ -6,18 +6,18 @@ const site = new URL('https://example.test');
 const ctx = (pathname: string, extra: Partial<SeoContext> = {}): SeoContext =>
   ({ site, pathname, mode: 'dev', socialImages: false, ...extra });
 
-test('the home page uses the site name as its title', async () => {
+test('the home page title is the site name, a colon and the tagline', async () => {
   const seo = await resolveSeo({ description: 'A description.' }, ctx('/'));
   assert.equal(SITE_NAME, 'Sonnets');
-  assert.equal(HOME_TITLE, "Sonnets - Shakespeare's sonnets, one at a time");
+  assert.equal(HOME_TITLE, "Sonnets: Shakespeare's sonnets, one at a time");
   assert.equal(seo.title, HOME_TITLE);
   assert.equal(seo.ogTitle, SITE_NAME);
   assert.equal(seo.canonicalUrl, 'https://example.test/');
 });
 
-test('other pages lead with their title, end in " - Sonnets" and get a self canonical', async () => {
+test('other pages lead with their title, end in " · Sonnets" and get a self canonical', async () => {
   const seo = await resolveSeo({ title: 'About', description: 'About this site.' }, ctx('/about/'));
-  assert.equal(seo.title, 'About - Sonnets');
+  assert.equal(seo.title, 'About · Sonnets');
   assert.equal(seo.ogTitle, 'About');
   assert.equal(seo.canonicalUrl, 'https://example.test/about/');
 });

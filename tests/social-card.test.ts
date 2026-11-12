@@ -4,8 +4,8 @@ import { cardText, createCard, eyebrowFor } from '../src/lib/social-card.ts';
 import { SITE_NAME, TAGLINE } from '../src/lib/seo.ts';
 
 test('the card shows the page title without the site name, and the tagline on the home page', () => {
-  assert.equal(cardText(`Sonnet 18 - ${SITE_NAME}`), 'Sonnet 18');
-  assert.equal(cardText(`${SITE_NAME} - ${TAGLINE}`), TAGLINE);
+  assert.equal(cardText(`Sonnet 18 · ${SITE_NAME}`), 'Sonnet 18');
+  assert.equal(cardText(`${SITE_NAME}: ${TAGLINE}`), TAGLINE);
   assert.equal(cardText('Untouched'), 'Untouched');
 });
 

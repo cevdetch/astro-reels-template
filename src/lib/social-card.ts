@@ -1,6 +1,6 @@
 // Build-only artwork for share images: mark and name, rule, eyebrow, title, domain.
 import { siteConfig } from '../config.ts';
-import { SEPARATOR, SITE_NAME, TAGLINE } from './seo.ts';
+import { HOME_TITLE, SEPARATOR, SITE_NAME, TAGLINE } from './seo.ts';
 
 export interface CardNode {
   type: 'div' | 'img';
@@ -24,7 +24,7 @@ const div = (style: Record<string, string | number>, children: NonNullable<CardN
 
 /** The page title without the site name; the home page shows the tagline. */
 export function cardText(title: string): string {
-  if (title.startsWith(`${SITE_NAME}${SEPARATOR}`)) return title.slice(SITE_NAME.length + SEPARATOR.length);
+  if (title === HOME_TITLE) return TAGLINE;
   if (title.endsWith(`${SEPARATOR}${SITE_NAME}`)) return title.slice(0, -(SITE_NAME.length + SEPARATOR.length));
   return title;
 }
