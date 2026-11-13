@@ -1,0 +1,39 @@
+---
+// The welcome cards at the top of the first feed page. They are what search engines index on the
+// home page, so say what your site is here, in your own words.
+import { siteConfig } from '../config.ts';
+
+const { name, intro, credit, author, repository } = siteConfig;
+---
+
+<section class="card intro" aria-labelledby="intro-title">
+  <div class="poem about">
+    <h1 id="intro-title">{name}</h1>
+    <p class="lead">{intro}</p>
+    <ul>
+      <li><strong>One piece per screen.</strong> CSS scroll-snap holds each card in place, and the mouse wheel, touch and the keyboard move one card at a time.</li>
+      <li><strong>Pages of 20.</strong> Each page ends with a card that opens the next, and the page turn cross-fades with a CSS view transition.</li>
+      <li><strong>Deep links.</strong> Every piece has an anchor in the feed and a page of its own, with links to its neighbours.</li>
+      <li><strong>Verse typesetting.</strong> Line breaks stay as written, and a line too long for the screen wraps with a hanging indent.</li>
+      <li><strong>Search-ready.</strong> Canonicals, a sitemap, structured data and a generated share image for every page.</li>
+    </ul>
+    <p class="hint">Scroll, or press ↓, Page Down or Space.</p>
+  </div>
+</section>
+<section class="card intro" aria-labelledby="use-title">
+  <div class="poem about">
+    <h2 id="use-title">Make it yours</h2>
+    <p>Start a project from the template:</p>
+    <pre><code>pnpm create astro@latest --template cevdetch/astro-reels-template</code></pre>
+    <p>Then put your site's name, address and author in <code>src/config.ts</code>, write each piece as a Markdown file in <code>src/content/sonnets/</code> and replace the icons in <code>public/</code>. <code>pnpm build</code> writes a static site that Cloudflare Pages, Netlify or GitHub Pages serve as it is.</p>
+    <p>With no JavaScript, the feed works with scripts turned off and loads nothing it does not show. The trade-off: the address bar does not follow the scroll, so the link to share is each piece's own page.</p>
+    <h2 id="demo-title">Demo content</h2>
+    <p>The pieces that follow are Shakespeare's 154 sonnets, first printed in 1609 and long in the public domain. <a href={credit.href}>{credit.text}</a>.</p>
+    {(repository || author) && (
+      <nav class="card-links" aria-label="About this template">
+        {repository && <a href={repository}>Source code and documentation</a>}
+        {author && (author.url ? <a href={author.url}>Made by {author.name}</a> : <span>Made by {author.name}</span>)}
+      </nav>
+    )}
+  </div>
+</section>

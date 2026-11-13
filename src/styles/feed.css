@@ -29,6 +29,15 @@
   .card-links { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-block-start: 1.75rem; font-family: system-ui, sans-serif; font-size: 0.9rem; }
   .card-links a { color: var(--muted); }
   .intro h1 { margin: 0 0 0.5rem; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }
+  /* The welcome cards: prose rather than verse, sized to fit one phone screen each. */
+  .about { font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem); }
+  .about .lead { font-size: 1.15em; }
+  .about h2 { margin: 1.5rem 0 0.5rem; font-size: 1.35em; }
+  .about h2:first-child { margin-block-start: 0; }
+  .about ul { padding-inline-start: 1.25rem; }
+  .about li + li { margin-block-start: 0.35rem; }
+  .about pre { margin: 0.75rem 0; padding: 0.75rem 1rem; border-radius: 4px; background: var(--bg-sunk); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .about code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.85em; }
   .hint { color: var(--muted); font-family: system-ui, sans-serif; font-size: 0.9rem; }
   .next a, .previous a { font-size: 1.25rem; }
 
@@ -44,6 +53,9 @@
   @media (max-height: 780px) {
     .card { padding-block: 4rem 2rem; }
     .verse { line-height: 1.55; }
+    .about { line-height: 1.45; }
+    .about h2 { margin-block-start: 1rem; }
+    .about p, .about ul { margin-block: 0.6rem; }
   }
 }
 

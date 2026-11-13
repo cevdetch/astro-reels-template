@@ -149,8 +149,19 @@ test('no page ships JavaScript', () => {
   for (const file of allHtml(dist)) assert.deepEqual(scriptsOtherThanJsonLd(readFileSync(file, 'utf8')), [], file.pathname);
 });
 
-test('the intro card takes its line and source credit from the config', () => {
+test('the welcome cards take their line and source credit from the config', () => {
   const html = read('index.html');
-  assert.match(html, new RegExp(`<p>${esc(siteConfig.intro.replace(/'/g, '&#39;'))}</p>|<p>${esc(siteConfig.intro)}</p>`));
+  assert.match(html, new RegExp(`<p class="lead">${esc(siteConfig.intro.replace(/'/g, '&#39;'))}</p>|<p class="lead">${esc(siteConfig.intro)}</p>`));
   assert.match(html, new RegExp(`<a href="${esc(siteConfig.credit.href)}"[^>]*>${esc(siteConfig.credit.text)}</a>`));
+});
+
+test('the home page explains the template in its own words, before the first sonnet', () => {
+  const html = read('index.html');
+  const own = html.slice(html.indexOf('<main'), html.indexOf('<section class="card sonnet"'));
+  const words = own.replace(/<[^>]+>/g, ' ').split(/\s+/).filter((w) => /\w/.test(w));
+  assert.ok(words.length >= 250, `${words.length} words`);
+  assert.match(own, /<code>pnpm create astro@latest --template cevdetch\/astro-reels-template<\/code>/);
+  assert.match(own, /Shakespeare&#39;s 154 sonnets|Shakespeare's 154 sonnets/);
+  assert.match(own, new RegExp(`<a href="${esc(siteConfig.repository!)}">`));
+  assert.match(own, new RegExp(`<a href="${esc(siteConfig.author!.url!)}">Made by ${esc(siteConfig.author!.name)}</a>`));
 });

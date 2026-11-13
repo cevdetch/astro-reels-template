@@ -1,14 +1,15 @@
-// Everything a template user changes lives here (plus the icons in public/).
+// Everything a template user changes lives here, plus the icons in public/ and the welcome cards in
+// src/components/Intro.astro.
 export const siteConfig: SiteConfig = {
-  name: 'Sonnets',
-  tagline: "Shakespeare's sonnets, one at a time",
-  description: "All 154 of Shakespeare's sonnets in a reels-style feed: one sonnet per screen, readable without JavaScript.",
+  name: 'Astro Reels Template',
+  tagline: 'a vertical feed with zero JavaScript',
+  description: "A zero-JavaScript, reels-style vertical feed template for Astro: one piece per screen and a page for each, demoed with Shakespeare's 154 sonnets.",
   origin: 'https://astro-reels-template.cevdet.ch',
   /** The path of feed page 1; later pages live at `<feedBase>page/<n>/`. */
   feedBase: '/',
   /** First feed card: one line under the name. */
-  intro: "Shakespeare's 154 sonnets, one per screen.",
-  /** Credit for the content, shown small on the first feed card. */
+  intro: 'A reels-style vertical feed for Astro: one piece per screen, a page of its own for every piece, and not a line of JavaScript.',
+  /** Credit for the content, shown on the welcome cards. */
   credit: { text: 'Text from Project Gutenberg', href: 'https://www.gutenberg.org/ebooks/1041' },
   /**
    * Whether search engines index each piece's page and the feed pages after the first. Leave it

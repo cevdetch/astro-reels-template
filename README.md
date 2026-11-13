@@ -32,6 +32,15 @@ share sheet; each piece's own page is the link to share.
 - Node.js 24.8.0 or newer
 - pnpm 12.3.4, pinned in `package.json`
 
+## Start a project
+
+```sh
+pnpm create astro@latest --template cevdetch/astro-reels-template
+```
+
+Or create a repository with [Use this template](https://github.com/cevdetch/astro-reels-template/generate)
+and clone it.
+
 ## Commands
 
 | Command | Purpose |
@@ -47,7 +56,7 @@ share sheet; each piece's own page is the link to share.
 ## Make it yours
 
 1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`,
-   the line and credit on the first card, and `feedBase` if the feed should live somewhere other
+   the line and credit on the welcome cards, and `feedBase` if the feed should live somewhere other
    than `/`. Set `author` to yourself and `repository` to your source code: the footer of every
    page credits both, and the home page's `WebSite` structured data names the author as its
    publisher. Either can be left out.
@@ -56,8 +65,11 @@ share sheet; each piece's own page is the link to share.
    the first carry `<meta name="robots" content="noindex, follow">` and are left out of the
    sitemap, so search engines index only the first feed page but still follow its links. Set it
    to `true` when the pieces are your own, and every page goes into search and the sitemap.
-3. **Icons.** Replace the files in `public/`; the share images reuse `public/icon.svg`.
-4. **Pieces.** Each piece is a Markdown file in `src/content/sonnets/`:
+3. **Welcome cards.** `src/components/Intro.astro` holds the cards before the first piece. They
+   introduce this template; say what your site is instead. They are the text search engines read
+   on your home page.
+4. **Icons.** Replace the files in `public/`; the share images reuse `public/icon.svg`.
+5. **Pieces.** Each piece is a Markdown file in `src/content/sonnets/`:
 
    ```markdown
    ---
@@ -75,12 +87,12 @@ share sheet; each piece's own page is the link to share.
    line of the body is a line on the page. Start a line with two spaces or two em spaces to
    indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
    Markdown.
-5. **Words.** The section is called `sonnets` in the content folder, `src/content.config.ts`,
+6. **Words.** The section is called `sonnets` in the content folder, `src/content.config.ts`,
    the routes under `src/pages/sonnets/`, `src/lib/sonnets.ts` and `PIECES_PATH` in
    `src/lib/seo.ts`. The share-image label lives in `SECTIONS` in `src/lib/social-card.ts`, and
    the pieces' author in their structured data in `src/lib/identity.ts`. Rename them together for
    your own kind of piece.
-6. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
+7. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
 
 ## Deploy
 
@@ -88,6 +100,39 @@ share sheet; each piece's own page is the link to share.
 static hosts such as Cloudflare Pages, Netlify and GitHub Pages serve from `index.html` files.
 Set `origin` in `src/config.ts` to the production address first: canonicals, the sitemap and
 share images use it.
+
+## SEO checklist
+
+What the template does for search:
+
+- Every page has one title: `<Page> · <Site>`, or `<Site>: <tagline>` on the home page.
+- Every page has a description of up to 160 characters (longer ones fail the build), a
+  self-referencing canonical in the trailing-slash form, Open Graph tags, a 1200×630 share image
+  and `twitter:card`.
+- The home page carries `WebSite` structured data with the author as publisher; each piece's page
+  carries `CreativeWork`.
+- `robots.txt` allows crawling and names the sitemap index. The sitemap lists only pages meant for
+  search.
+- The 404 page is served as `404.html`, `noindex` and without a canonical.
+- Every page reads in full without JavaScript, and `pnpm lint:html` audits the built HTML.
+
+The index option, `indexPieces` in `src/config.ts`:
+
+- `false` (the default, for demo text or text published elsewhere): each piece's page and the
+  feed pages after the first carry `noindex, follow` and stay out of the sitemap. Only the home
+  page is indexed, so it needs words of its own: the welcome cards.
+- `true` (for your own pieces): every page except the 404 is indexed and listed in the sitemap.
+
+What a fork must set before launch:
+
+1. `origin` in `src/config.ts`: canonicals, the sitemap, `robots.txt` and share images use it.
+2. `name`, `tagline` and `description`, written for the people searching for your site.
+3. `author` and `repository`, or remove them.
+4. `indexPieces`, as above.
+5. The welcome cards in `src/components/Intro.astro`, and the pieces' author in
+   `src/lib/identity.ts`.
+6. Run `pnpm verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
+   Webmaster Tools.
 
 ## Acknowledgements
 
