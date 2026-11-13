@@ -2,8 +2,8 @@ import { siteConfig } from '../config.ts';
 
 export const SITE_NAME = siteConfig.name;
 export const TAGLINE = siteConfig.tagline;
-/** Between a page title and the site name; the narrowest separator, so more of a title survives truncation. */
-export const SEPARATOR = ' · ';
+/** Between a page title and the site name; Google names the hyphen as a title delimiter it recognises. */
+export const SEPARATOR = ' - ';
 export const HOME_TITLE = `${SITE_NAME}: ${TAGLINE}`;
 export const MAX_DESCRIPTION = 160;
 /** Where the piece pages live; the routes are in src/pages/sonnets/. */

@@ -15,9 +15,9 @@ test('the home page title is the site name, a colon and the tagline', async () =
   assert.equal(seo.canonicalUrl, 'https://example.test/');
 });
 
-test('other pages lead with their title, end in " · <site name>" and get a self canonical', async () => {
+test('other pages lead with their title, end in " - <site name>" and get a self canonical', async () => {
   const seo = await resolveSeo({ title: 'About', description: 'About this site.' }, ctx('/about/'));
-  assert.equal(seo.title, 'About · Astro Reels Template');
+  assert.equal(seo.title, 'About - Astro Reels Template');
   assert.equal(seo.robots, undefined);
   assert.equal(seo.ogTitle, 'About');
   assert.equal(seo.canonicalUrl, 'https://example.test/about/');

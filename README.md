@@ -105,7 +105,7 @@ share images use it.
 
 What the template does for search:
 
-- Every page has one title: `<Page> · <Site>`, or `<Site>: <tagline>` on the home page.
+- Every page has one title: `<Page> - <Site>`, or `<Site>: <tagline>` on the home page.
 - Every page has a description of up to 160 characters (longer ones fail the build), a
   self-referencing canonical in the trailing-slash form, Open Graph tags, a 1200×630 share image
   and `twitter:card`.
