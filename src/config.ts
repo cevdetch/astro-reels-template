@@ -1,3 +1,5 @@
+import type { PersonRef } from './lib/structured-data.ts';
+
 // Everything a template user changes lives here, plus the icons in public/ and the welcome cards in
 // src/components/Intro.astro.
 export const siteConfig: SiteConfig = {
@@ -37,8 +39,8 @@ export interface SiteConfig {
   intro: string;
   credit: { text: string; href: string };
   indexPieces: boolean;
-  /** `url` is your home page; its `#person` is the publisher's identifier in the structured data. */
-  author?: { name: string; url?: string };
+  /** `url` is your home page; `<url>#person` identifies you in the structured data unless you set `id`. */
+  author?: PersonRef;
   repository?: string;
   socialImages: boolean;
 }

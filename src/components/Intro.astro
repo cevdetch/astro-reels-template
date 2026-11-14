@@ -32,7 +32,7 @@ const { name, intro, credit, author, repository } = siteConfig;
     {(repository || author) && (
       <nav class="card-links" aria-label="About this template">
         {repository && <a href={repository}>Source code and documentation</a>}
-        {author && (author.url ? <a href={author.url}>Made by {author.name}</a> : <span>Made by {author.name}</span>)}
+        {author && <a href={author.url}>Made by {author.name}</a>}
       </nav>
     )}
   </div>

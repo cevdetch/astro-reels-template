@@ -29,7 +29,7 @@ export interface LayoutProps {
   description: string;
   /** For pages that should not exist, such as the 404 page: noindex, with no canonical or share image. */
   noindex?: boolean;
-  /** Serialized JSON-LD for this page, rendered as-is. */
+  /** This page's JSON-LD from serializeJsonLd() in src/lib/structured-data.ts, rendered as-is. */
   jsonLd?: string;
   /** Open Graph type; essays are articles. */
   ogType?: 'website' | 'article';

@@ -1,35 +1,20 @@
 import { siteConfig, type SiteConfig } from '../config.ts';
 import { SITE_NAME } from './seo.ts';
+import { creativeWorkNode, graph, serializeJsonLd, websiteNode } from './structured-data.ts';
 
-/** The site's author as a schema.org Person, identified by `#person` on their own home page. */
-export function publisher(author: SiteConfig['author']): Record<string, string> | undefined {
-  if (!author) return undefined;
-  return author.url
-    ? { '@type': 'Person', '@id': new URL('#person', author.url).href, name: author.name, url: author.url }
-    : { '@type': 'Person', name: author.name };
+/** The home page's WebSite, published by the configured author; with no author, it names no publisher. */
+export function homeJsonLd(origin: URL, { author }: Pick<SiteConfig, 'author'> = siteConfig): string {
+  return serializeJsonLd(graph(websiteNode({
+    url: new URL('/', origin).href, name: SITE_NAME, inLanguage: 'en', publisher: author ?? null,
+  })));
 }
 
-export function homeJsonLd(origin: URL): string {
-  return JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': new URL('/#website', origin).href,
-    name: SITE_NAME,
-    url: new URL('/', origin).href,
-    publisher: publisher(siteConfig.author),
-  });
-}
-
+/** A piece's page. The pieces are Shakespeare's: change the author and the book along with them. */
 export function sonnetJsonLd(input: { url: string; name: string; description: string }): string {
-  return JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    '@id': `${input.url}#work`,
-    name: input.name,
-    description: input.description,
+  return serializeJsonLd(graph(creativeWorkNode({
+    ...input,
     inLanguage: 'en',
-    url: input.url,
     author: { '@type': 'Person', name: 'William Shakespeare' },
-    isPartOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
-  });
+    partOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
+  })));
 }

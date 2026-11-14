@@ -72,18 +72,27 @@ test('indexable pages carry Open Graph tags and a 1200x630 share image', async (
   assert.equal(info.height, 630);
 });
 
-test('the home page declares the WebSite and its publisher', () => {
-  const script = read('index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s);
-  assert.ok(script);
-  const site = JSON.parse(script[1]!) as Record<string, unknown>;
-  assert.equal(site['@type'], 'WebSite');
-  assert.equal(site['name'], SITE_NAME);
-  assert.deepEqual(site['publisher'], { '@type': 'Person', '@id': 'https://cevdet.ch/#person', name: 'Cevdet', url: 'https://cevdet.ch/' });
+/** The page's one JSON-LD script, as the nodes of its @graph. */
+const jsonLd = (path: string): Record<string, unknown>[] => {
+  const scripts = [...read(path).matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)];
+  assert.equal(scripts.length, 1, path);
+  const ld = JSON.parse(scripts[0]![1]!) as { '@context': string; '@graph': Record<string, unknown>[] };
+  assert.equal(ld['@context'], 'https://schema.org', path);
+  return ld['@graph'];
+};
+
+test('the home page declares the WebSite, published by the configured author', () => {
+  const { author } = siteConfig;
+  assert.ok(author);
+  assert.deepEqual(jsonLd('index.html'), [{
+    '@type': 'WebSite', '@id': `${origin}/#website`, url: `${origin}/`, name: SITE_NAME, inLanguage: 'en',
+    publisher: { '@type': 'Person', '@id': 'https://cevdet.ch/#person', name: author.name, url: 'https://cevdet.ch/' },
+  }]);
 });
 
 test('every page ends with the author and source credit from the config', () => {
   const { author, repository } = siteConfig;
-  assert.ok(author?.url && repository);
+  assert.ok(author && repository);
   for (const path of ['index.html', 'page/8/index.html', 'sonnets/18/index.html', '404.html']) {
     const footer = read(path).match(/<footer class="site">(.*?)<\/footer>/s)?.[1];
     assert.equal(footer, `<p>By <a href="${author.url}">${author.name}</a> · <a href="${repository}">Source code</a></p>`, path);
@@ -138,11 +147,12 @@ test('a sonnet page: title, first-line description, couplet indentation, neighbo
 });
 
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {
-  const ld = JSON.parse(read('sonnets/18/index.html').match(/<script type="application\/ld\+json">(.*?)<\/script>/s)![1]!) as Record<string, unknown>;
-  assert.equal(ld['@type'], 'CreativeWork');
-  assert.equal(ld['name'], 'Sonnet 18');
-  assert.deepEqual(ld['author'], { '@type': 'Person', name: 'William Shakespeare' });
-  assert.deepEqual(ld['isPartOf'], { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' });
+  assert.deepEqual(jsonLd('sonnets/18/index.html'), [{
+    '@type': 'CreativeWork', '@id': `${origin}/sonnets/18/#work`, url: `${origin}/sonnets/18/`, name: 'Sonnet 18',
+    description: 'Shall I compare thee to a summer’s day?', inLanguage: 'en',
+    author: { '@type': 'Person', name: 'William Shakespeare' },
+    isPartOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
+  }]);
 });
 
 test('no page ships JavaScript', () => {
@@ -163,5 +173,5 @@ test('the home page explains the template in its own words, before the first son
   assert.match(own, /<code>pnpm create astro@latest --template cevdetch\/astro-reels-template<\/code>/);
   assert.match(own, /Shakespeare&#39;s 154 sonnets|Shakespeare's 154 sonnets/);
   assert.match(own, new RegExp(`<a href="${esc(siteConfig.repository!)}">`));
-  assert.match(own, new RegExp(`<a href="${esc(siteConfig.author!.url!)}">Made by ${esc(siteConfig.author!.name)}</a>`));
+  assert.match(own, new RegExp(`<a href="${esc(siteConfig.author!.url)}">Made by ${esc(siteConfig.author!.name)}</a>`));
 });
