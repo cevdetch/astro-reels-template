@@ -24,7 +24,7 @@ export const siteConfig: SiteConfig = {
    * Who publishes the site: credited in every page's footer and named as the publisher in the home
    * page's structured data. Leave it out to show neither.
    */
-  author: { name: 'Cevdet', url: 'https://cevdet.ch/' },
+  author: { name: 'Cevdet Haran', url: 'https://cevdet.ch/' },
   /** The source code, linked from the footer. Leave it out to drop the link. */
   repository: 'https://github.com/cevdetch/astro-reels-template',
   socialImages: true,
