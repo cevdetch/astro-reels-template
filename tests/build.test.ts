@@ -167,7 +167,7 @@ test('a feed card names the piece and shows its place in the collection', () => 
 
 test('turning forward lands on the first piece of the next page, not on its previous-page card', () => {
   const card20 = read('index.html').match(/<section class="card sonnet" id="20".*?<\/section>/s)?.[0] ?? '';
-  assert.match(card20, /<a href="\/page\/2\/#21">Next<\/a>/);
+  assert.match(card20, /<a href="\/page\/2\/#21">Next<span class="visually-hidden">: Sonnet 21<\/span> ↓<\/a>/);
   assert.match(read('page/7/index.html'), /<a href="\/page\/8\/#141" rel="next">/);
   assert.match(read('page/2/index.html'), /<a href="\/" rel="prev">← Previous: sonnets 1–20<\/a>/);
 });
@@ -184,6 +184,26 @@ test("every piece and page string in the feed comes from the config's words", ()
   assert.match(sonnet18, new RegExp(`rel="prev">← ${words.piece(17)}</a>`));
   assert.match(sonnet18, new RegExp(`rel="next">${words.piece(19)} →</a>`));
   assert.match(read('index.html'), new RegExp(`<nav class="card-links" aria-label="${words.piece(3)}">`));
+});
+
+const cardLinks = (html: string) => [...html.matchAll(/<nav class="card-links" aria-label="[^"]*">(.*?)<\/nav>/gs)].map((m) => m[1]!);
+
+test('feed card links say where they go, with arrows, and name the piece for screen readers', () => {
+  const card3 = cardLinks(read('index.html')).find((l) => l.includes('/sonnets/3/'));
+  assert.equal(card3, '<a href="#4">Next<span class="visually-hidden">: Sonnet 4</span> ↓</a><a href="/sonnets/3/"><span class="visually-hidden">Sonnet 3’s </span>Own page →</a>');
+});
+
+test('no two links in the feed share a name', () => {
+  const names = cardLinks(read('index.html')).flatMap((l) => [...l.matchAll(/<a\b[^>]*>(.*?)<\/a>/gs)].map((m) => text(m[1]!)));
+  assert.ok(names.length >= 40);
+  assert.equal(new Set(names).size, names.length);
+});
+
+test('the last piece leads back to the first instead of onward', () => {
+  const last = cardLinks(read('page/8/index.html')).find((l) => l.includes('/sonnets/154/'));
+  assert.ok(last);
+  assert.match(last, /<a href="\/#1">Back to the first ↑<\/a>/);
+  assert.doesNotMatch(last, />Next</);
 });
 
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {

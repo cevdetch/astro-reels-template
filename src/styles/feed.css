@@ -38,8 +38,9 @@
      reads as a new line; indented lines (the couplets) sit further in. */
   .line { display: block; padding-inline-start: 1.5em; text-indent: -1.5em; }
   .line.indent { padding-inline-start: 3.5em; }
-  .card-links { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-block-start: 1.75rem; font-family: system-ui, sans-serif; font-size: 0.9rem; }
-  .card-links a { color: var(--muted); }
+  /* The padding makes each link a ~42px-tall target without moving the text. */
+  .card-links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin-block-start: 1.15rem; font-family: system-ui, sans-serif; font-size: 0.9rem; }
+  .card-links a { padding-block: 0.6rem; color: var(--muted); }
   .intro h1 { margin: 0 0 0.5rem; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }
   /* The welcome cards: prose rather than verse, sized to fit one phone screen each. */
   .about { font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem); }

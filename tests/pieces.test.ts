@@ -5,6 +5,7 @@ import { pieceWords } from '../src/lib/pieces.ts';
 test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   const words = pieceWords();
   assert.equal(words.piece(18), 'Sonnet 18');
+  assert.equal(words.pieceOwner(18), 'Sonnet 18’s');
   assert.equal(words.range(21, 40), 'sonnets 21–40');
   assert.equal(words.more, 'More sonnets');
   assert.equal(words.previousGroup, 'Previous sonnets');

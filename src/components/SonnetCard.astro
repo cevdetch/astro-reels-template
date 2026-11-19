@@ -32,8 +32,9 @@ const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n
     </div>
     {context === 'feed' && (
       <nav class="card-links" aria-label={words.piece(n)}>
-        {next && <a href={next}>Next</a>}
-        <a href={sonnetPath(n)}>Open</a>
+        {next && <a href={next}>Next<span class="visually-hidden">{`: ${words.piece(n + 1)}`}</span> ↓</a>}
+        {!next && <a href={feedHref(1)}>Back to the first ↑</a>}
+        <a href={sonnetPath(n)}><span class="visually-hidden">{`${words.pieceOwner(n)} `}</span>Own page →</a>
       </nav>
     )}
     {context === 'page' && (
