@@ -1,9 +1,8 @@
 ---
 import Intro from './Intro.astro';
 import PieceCard from './PieceCard.astro';
-import { siteConfig } from '../config.ts';
 import type { Piece } from '../lib/collection.ts';
-import { feedHref, pageCount, pageHref, pageRange, PAGE_SIZE } from '../lib/feed.ts';
+import { feedHref, pageCount, pageRange, PAGE_SIZE } from '../lib/feed.ts';
 import { pieceWords } from '../lib/pieces.ts';
 import '../styles/feed.css';
 
@@ -22,8 +21,8 @@ const words = pieceWords();
   {page === 1 && <Intro />}
   {page > 1 && before && (
     <section class="card previous" aria-label={words.previousGroup}>
-      <h1 class="visually-hidden">{`${siteConfig.name}: ${words.range(first, last)}`}</h1>
-      <a href={pageHref(page - 1)} rel="prev">{`← Previous: ${words.range(before.first, before.last)}`}</a>
+      <h1 class="number">{words.range(first, last)}</h1>
+      <a href={feedHref(before.last)} rel="prev">{`← Previous: ${words.range(before.first, before.last)}`}</a>
     </section>
   )}
   {shown.map((piece) => <PieceCard piece={piece} total={total} context="feed" />)}

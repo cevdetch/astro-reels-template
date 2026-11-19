@@ -11,6 +11,8 @@
     /* One column for everything: the header, the poem and the prose share its left edge. */
     --measure: 34rem;
     --gutter: 1.5rem;
+    /* Palatino and its free clones (P052, TeX Gyre Pagella) first, then Android's own serif. */
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", P052, "TeX Gyre Pagella", "URW Palladio L", Georgia, "Noto Serif", serif;
   }
   @media (max-width: 30rem) {
     :root { --gutter: 1rem; }

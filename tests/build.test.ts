@@ -40,7 +40,7 @@ test('the 404 page is noindex, has no canonical or share image, and is not in th
   assert.match(html, /<meta name="robots" content="noindex">/);
   assert.doesNotMatch(html, /rel="canonical"|og:image/);
   assert.doesNotMatch(read('sitemap-0.xml'), /404/);
-  assert.match(html, /<a href="\/">Go to the home page<\/a><a href="\/#1">Start with Sonnet 1 ↓<\/a>/);
+  assert.match(html, /<a href="\/">Go to the home page<\/a><a href="\/#1">Start with Sonnet 1 →<\/a>/);
 });
 
 test('robots.txt allows crawling and names the sitemap index', () => {
@@ -171,14 +171,15 @@ test('turning forward lands on the first piece of the next page, not on its prev
   const card20 = read('index.html').match(/<section class="card piece" id="20".*?<\/section>/s)?.[0] ?? '';
   assert.match(card20, /<a href="\/page\/2\/#21">Next<span class="visually-hidden">: Sonnet 21<\/span> ↓<\/a>/);
   assert.match(read('page/7/index.html'), /<a href="\/page\/8\/#141" rel="next">/);
-  assert.match(read('page/2/index.html'), /<a href="\/" rel="prev">← Previous: sonnets 1–20<\/a>/);
+  assert.match(read('page/2/index.html'), /<a href="\/#20" rel="prev">← Previous: sonnets 1–20<\/a>/);
+  assert.match(read('page/3/index.html'), /<a href="\/page\/2\/#40" rel="prev">/);
 });
 
 test("every piece and page string in the feed comes from the config's words", () => {
   const words = pieceWords();
   const page2 = read('page/2/index.html');
   assert.match(page2, new RegExp(`aria-label="${words.previousGroup}"`));
-  assert.match(page2, new RegExp(`<h1 class="visually-hidden">${esc(SITE_NAME)}: ${words.range(21, 40)}</h1>`));
+  assert.match(page2, new RegExp(`<h1 class="number">${words.range(21, 40)}</h1>`));
   assert.match(page2, new RegExp(`aria-label="${words.nextGroup}"`));
   assert.match(page2, new RegExp(`<meta name="description" content="${esc(words.pageDescription(21, 40, 154))}">`));
   const sonnet18 = read('sonnets/18/index.html');
@@ -206,6 +207,12 @@ test('the last piece leads back to the first instead of onward', () => {
   assert.ok(last);
   assert.match(last, /<a href="\/#1">Back to the first ↑<\/a>/);
   assert.doesNotMatch(last, />Next</);
+});
+
+test('a piece page keeps previous and next together, before the feed link', () => {
+  const links = cardLinks(read(`${siteConfig.pieces.name}/18/index.html`))[0] ?? '';
+  const hrefs = [...links.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(hrefs, [`/${siteConfig.pieces.name}/17/`, `/${siteConfig.pieces.name}/19/`, '/#18']);
 });
 
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {

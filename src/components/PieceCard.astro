@@ -40,8 +40,8 @@ const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n
     {context === 'page' && (
       <nav class="card-links" aria-label={words.more}>
         {n > 1 && <a href={piecePath(n - 1)} rel="prev">{`← ${words.piece(n - 1)}`}</a>}
-        <a href={feedHref(n)}>See it in the feed</a>
         {n < total && <a href={piecePath(n + 1)} rel="next">{`${words.piece(n + 1)} →`}</a>}
+        <a href={feedHref(n)}>See it in the feed</a>
       </nav>
     )}
   </div>
