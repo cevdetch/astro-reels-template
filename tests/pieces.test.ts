@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pieceWords, piecePath } from '../src/lib/pieces.ts';
+import { siteConfig } from '../src/config.ts';
+import { orderPieces, pieceNameProblem, pieceWords, piecePath } from '../src/lib/pieces.ts';
 
 test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   const words = pieceWords();
@@ -22,4 +23,31 @@ test("a fork's words reach every string", () => {
 
 test('a piece lives at its own path', () => {
   assert.equal(piecePath(18), '/sonnets/18/');
+});
+
+test('a piece lives under the configured name', () => {
+  assert.equal(piecePath(18), `/${siteConfig.pieces.name}/18/`);
+  assert.equal(piecePath(3, { name: 'poems' }), '/poems/3/');
+});
+
+test('the name is a folder and a URL segment: lowercase, digits, hyphens, and not "page"', () => {
+  for (const name of ['sonnets', 'poems', 'short-stories', 'haiku2']) assert.equal(pieceNameProblem(name), undefined, name);
+  for (const name of ['', 'Poems', '_x', '1poems', 'poems/x', 'poems x', '.well-known']) assert.match(pieceNameProblem(name) ?? '', /pieces\.name/, name);
+  assert.match(pieceNameProblem('page') ?? '', /\/page\/2\//);
+});
+
+const entry = (number: number, body = 'A line') => ({ data: { number }, body });
+
+test('pieces come out in number order', () => {
+  assert.deepEqual(orderPieces([entry(3), entry(1), entry(2)]).map((p) => p.data.number), [1, 2, 3]);
+});
+
+test('an empty collection names the folder and the setting', () => {
+  assert.throws(() => orderPieces([], { name: 'poems', label: 'Poem' }),
+    { message: 'No pieces in src/content/poems/. Set pieces.name in src/config.ts to the name of your content folder.' });
+});
+
+test('a duplicate number or an empty body fails, naming the piece', () => {
+  assert.throws(() => orderPieces([entry(1), entry(1)], { name: 'poems', label: 'Poem' }), /Poem 1 appears twice/);
+  assert.throws(() => orderPieces([entry(1, '  ')], { name: 'poems', label: 'Poem' }), /Poem 1 has an empty body/);
 });

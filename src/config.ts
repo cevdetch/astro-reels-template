@@ -2,7 +2,17 @@ import type { PersonRef } from './lib/structured-data.ts';
 
 // Everything a template user changes lives here, plus the icons in public/ and the welcome cards in
 // src/components/Intro.astro.
-export const siteConfig: SiteConfig = {
+
+/**
+ * What the pieces are called and who made them. `name` is the content folder
+ * (src/content/sonnets/), the collection and the URL segment (/sonnets/18/): lowercase letters,
+ * digits and hyphens. A piece's page is headed "Sonnet 18" and signed with the creator, who is
+ * also the author in its structured data; links and page cards say "sonnets 21–40". `plural` is
+ * written as it reads mid-sentence.
+ */
+const pieces = { name: 'sonnets', label: 'Sonnet', plural: 'sonnets', creator: 'William Shakespeare' } as const;
+// Everything else is typed by SiteConfig, so optional settings such as `author` can be left out.
+export const siteConfig: SiteConfig & { pieces: typeof pieces } = {
   name: 'Astro Reels Template',
   tagline: 'a vertical feed with zero JavaScript',
   description: "A zero-JavaScript, reels-style vertical feed template for Astro: one piece per screen and a page for each, demoed with Shakespeare's 154 sonnets.",
@@ -13,12 +23,7 @@ export const siteConfig: SiteConfig = {
   intro: 'A reels-style vertical feed for Astro: one piece per screen, a page of its own for every piece, and not a line of JavaScript.',
   /** Credit for the content, shown on the welcome cards. */
   credit: { text: 'Text from Project Gutenberg', href: 'https://www.gutenberg.org/ebooks/1041' },
-  /**
-   * What the pieces are called and who made them: a piece's page is headed "Sonnet 18" and signed
-   * with the creator, who is also the author in its structured data; links and page cards say
-   * "sonnets 21–40". `plural` is written as it reads mid-sentence.
-   */
-  pieces: { label: 'Sonnet', plural: 'sonnets', creator: 'William Shakespeare' },
+  pieces,
   /**
    * Whether search engines index each piece's page and the feed pages after the first. Leave it
    * false for demo text or text published elsewhere, such as these sonnets: those pages then carry
@@ -44,7 +49,7 @@ export interface SiteConfig {
   feedBase: string;
   intro: string;
   credit: { text: string; href: string };
-  pieces: { label: string; plural: string; creator: string };
+  pieces: { name: string; label: string; plural: string; creator: string };
   indexPieces: boolean;
   /** `url` is your home page; `<url>#person` identifies you in the structured data unless you set `id`. */
   author?: PersonRef;

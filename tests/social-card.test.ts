@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { siteConfig } from '../src/config.ts';
 import { cardText, createCard, eyebrowFor } from '../src/lib/social-card.ts';
 import { SITE_NAME, TAGLINE } from '../src/lib/seo.ts';
 
@@ -9,10 +10,10 @@ test('the card shows the page title without the site name, and the tagline on th
   assert.equal(cardText('Untouched'), 'Untouched');
 });
 
-test('sonnet pages get the Sonnet eyebrow; home and list pages get none', () => {
+test('piece pages get the label as eyebrow; home and list pages get none', () => {
   assert.equal(eyebrowFor('https://example.test/'), undefined);
   assert.equal(eyebrowFor('https://example.test/about/'), undefined);
-  assert.equal(eyebrowFor('https://example.test/sonnets/18/'), 'Sonnet');
+  assert.equal(eyebrowFor(`https://example.test/${siteConfig.pieces.name}/18/`), siteConfig.pieces.label);
 });
 
 test('the card is 1200x630 and carries the mark', () => {

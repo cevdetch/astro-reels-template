@@ -1,16 +1,12 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { pieceWords } from './pieces.ts';
+import { siteConfig } from '../config.ts';
+import { orderPieces } from './pieces.ts';
 
-export type Piece = CollectionEntry<'sonnets'>;
+const { name } = siteConfig.pieces;
 
-/** Published pieces in order. Fails on duplicate numbers or empty bodies. */
+export type Piece = CollectionEntry<typeof name>;
+
+/** Published pieces in number order; fails when there are none, or on duplicates and empty bodies. */
 export async function getPieces(): Promise<Piece[]> {
-  const words = pieceWords();
-  const pieces = (await getCollection('sonnets', (entry) => !entry.data.draft))
-    .sort((a, b) => a.data.number - b.data.number);
-  pieces.forEach((piece, i) => {
-    if (!piece.body?.trim()) throw new Error(`${words.piece(piece.data.number)} has an empty body.`);
-    if (i > 0 && pieces[i - 1]!.data.number === piece.data.number) throw new Error(`${words.piece(piece.data.number)} appears twice.`);
-  });
-  return pieces;
+  return orderPieces(await getCollection(name, (entry) => !entry.data.draft));
 }

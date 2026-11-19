@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../../config.ts';
 import PieceCard from '../../components/PieceCard.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getPieces, type Piece } from '../../lib/collection.ts';
@@ -8,7 +9,7 @@ import '../../styles/feed.css';
 
 export async function getStaticPaths() {
   const pieces = await getPieces();
-  return pieces.map((piece) => ({ params: { number: String(piece.data.number) }, props: { piece, total: pieces.length } }));
+  return pieces.map((piece) => ({ params: { section: siteConfig.pieces.name, number: String(piece.data.number) }, props: { piece, total: pieces.length } }));
 }
 
 interface Props { piece: Piece; total: number }

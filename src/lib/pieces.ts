@@ -20,5 +20,30 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
   };
 }
 
-/** A piece's own page. */
-export const piecePath = (n: number): string => `/sonnets/${n}/`;
+/** A piece's own page: /<name>/<n>/. */
+export const piecePath = (n: number, { name }: Pick<SiteConfig['pieces'], 'name'> = siteConfig.pieces): string => `/${name}/${n}/`;
+
+/** Why `pieces.name` cannot name a content folder and URL segment, or nothing when it can. */
+export function pieceNameProblem(name: string): string | undefined {
+  if (!/^[a-z][a-z0-9-]*$/.test(name)) {
+    return `pieces.name in src/config.ts names the content folder and the URL segment, so it takes lowercase letters, digits and hyphens, starting with a letter (got "${name}").`;
+  }
+  if (name === 'page') return 'pieces.name in src/config.ts cannot be "page": /page/2/ is the second feed page.';
+  return undefined;
+}
+
+export interface PieceLike { data: { number: number }; body?: string | undefined }
+
+/** Pieces in number order. Fails on an empty collection, a duplicate number or an empty body. */
+export function orderPieces<T extends PieceLike>(entries: T[], { name, label }: Pick<SiteConfig['pieces'], 'name' | 'label'> = siteConfig.pieces): T[] {
+  if (entries.length === 0) {
+    throw new Error(`No pieces in src/content/${name}/. Set pieces.name in src/config.ts to the name of your content folder.`);
+  }
+  const sorted = [...entries].sort((a, b) => a.data.number - b.data.number);
+  sorted.forEach((piece, i) => {
+    const n = piece.data.number;
+    if (!piece.body?.trim()) throw new Error(`${label} ${n} has an empty body.`);
+    if (i > 0 && sorted[i - 1]!.data.number === n) throw new Error(`${label} ${n} appears twice.`);
+  });
+  return sorted;
+}

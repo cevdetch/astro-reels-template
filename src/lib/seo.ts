@@ -6,8 +6,8 @@ export const TAGLINE = siteConfig.tagline;
 export const SEPARATOR = ' - ';
 export const HOME_TITLE = `${SITE_NAME}: ${TAGLINE}`;
 export const MAX_DESCRIPTION = 160;
-/** Where the piece pages live; the routes are in src/pages/sonnets/. */
-export const PIECES_PATH = '/sonnets/';
+/** Where the piece pages live: /<pieces.name>/, built by src/pages/[section]/[number].astro. */
+export const PIECES_PATH = `/${siteConfig.pieces.name}/`;
 
 /**
  * Whether search engines should index the page at this path: everything except the 404 page,

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { HOME_TITLE, MAX_DESCRIPTION, SITE_NAME, inSearch, resolveSeo, type SeoContext } from '../src/lib/seo.ts';
+import { siteConfig } from '../src/config.ts';
+import { HOME_TITLE, MAX_DESCRIPTION, SITE_NAME, inSearch, resolveSeo, type SeoContext, PIECES_PATH } from '../src/lib/seo.ts';
 
 const site = new URL('https://example.test');
 const ctx = (pathname: string, extra: Partial<SeoContext> = {}): SeoContext =>
@@ -32,11 +33,12 @@ test('noindex pages have no canonical', async () => {
 
 test('with indexPieces false, only the first feed page and other pages are in search', () => {
   for (const path of ['/', '/about/']) assert.equal(inSearch(path), true, path);
-  for (const path of ['/page/2/', '/page/8/', '/sonnets/1/', '/sonnets/154/', '/404/', '/404.html']) assert.equal(inSearch(path), false, path);
+  const pieces = `/${siteConfig.pieces.name}`;
+  for (const path of ['/page/2/', '/page/8/', `${pieces}/1/`, `${pieces}/154/`, '/404/', '/404.html']) assert.equal(inSearch(path), false, path);
 });
 
 test('piece pages and later feed pages are noindex, follow but keep their canonical and share image', async () => {
-  for (const path of ['/sonnets/18/', '/page/2/']) {
+  for (const path of [`/${siteConfig.pieces.name}/18/`, '/page/2/']) {
     const seo = await resolveSeo({ title: 'A piece', description: 'x' }, ctx(path, { mode: 'build', socialImages: true }));
     assert.equal(seo.robots, 'noindex, follow', path);
     assert.equal(seo.noindex, false, path);
@@ -66,4 +68,8 @@ test('indexable build pages get a generated share image; noindex pages do not', 
   assert.equal(seo.ogTitle, 'About');
   const off = await resolveSeo({ title: 'Gone', description: 'x', noindex: true }, ctx('/404', { mode: 'build', socialImages: true }));
   assert.equal(off.social, undefined);
+});
+
+test('the piece pages live under the configured name', () => {
+  assert.equal(PIECES_PATH, `/${siteConfig.pieces.name}/`);
 });

@@ -1,10 +1,16 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { siteConfig } from './config.ts';
+import { pieceNameProblem } from './lib/pieces.ts';
 import { MAX_DESCRIPTION } from './lib/seo.ts';
 
-const sonnets = defineCollection({
-  loader: glob({ base: './src/content/sonnets', pattern: '**/*.md' }),
+const { name } = siteConfig.pieces;
+const problem = pieceNameProblem(name);
+if (problem) throw new Error(problem);
+
+const pieces = defineCollection({
+  loader: glob({ base: `./src/content/${name}`, pattern: '**/*.md' }),
   schema: z.object({
     number: z.number().int().positive(),
     title: z.string().trim().min(1),
@@ -13,4 +19,4 @@ const sonnets = defineCollection({
   }).strict(),
 });
 
-export const collections = { sonnets };
+export const collections = { [name]: pieces };
