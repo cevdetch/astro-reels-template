@@ -71,7 +71,8 @@ and clone it.
    introduce this template; say what your site is instead. They are the text search engines read
    on your home page.
 4. **Icons.** Replace the files in `public/`; the share images reuse `public/icon.svg`.
-5. **Pieces.** Each piece is a Markdown file in `src/content/sonnets/`:
+5. **Pieces.** Each piece is a Markdown file in the folder `pieces.name` names in
+   `src/config.ts`, `src/content/sonnets/` in the demo:
 
    ```markdown
    ---
@@ -89,14 +90,14 @@ and clone it.
    line of the body is a line on the page. Start a line with two spaces or two em spaces to
    indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
    Markdown.
-6. **Words.** `pieces` in `src/config.ts` names the pieces and their creator: a piece's page is
-   headed "Sonnet 18" and signed "William Shakespeare", feed cards read "18 of 154", links and
-   page cards say "sonnets 21–40", the share images use the label, and the structured data names
-   the creator as the author. `src/lib/pieces.ts` builds every such string from it. The section is
-   called `sonnets` in the content folder, `src/content.config.ts`, the routes under
-   `src/pages/sonnets/`, `src/lib/sonnets.ts` and `PIECES_PATH` in `src/lib/seo.ts`, and the
-   book the pieces belong to is set in `src/lib/identity.ts`. Rename them together for your own
-   kind of piece.
+6. **Name your pieces.** `pieces` in `src/config.ts` sets everything the pieces are called. `name`
+   is the content folder, the collection and the URL segment: set it to `poems`, rename
+   `src/content/sonnets/` to `src/content/poems/`, and pieces live at `/poems/18/`, with the
+   `noindex` rule, the sitemap and the share-card label following. `label`, `plural` and `creator`
+   are the words: a piece's page is headed "Sonnet 18" and signed "William Shakespeare", feed
+   cards read "18 of 154", and links and page cards say "sonnets 21–40". A name that cannot be a
+   folder and URL segment, or a folder with no pieces, fails the build. The book the demo's
+   pieces belong to is set in `src/lib/identity.ts`.
 7. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
 
 ## Deploy
@@ -139,8 +140,8 @@ What a fork must set before launch:
 3. `author` and `repository`, or remove them. The build warns while `author` still credits
    cevdet.ch from another address.
 4. `indexPieces`, as above.
-5. The welcome cards in `src/components/Intro.astro`, `pieces` in `src/config.ts`, and the
-   pieces' book in `src/lib/identity.ts`.
+5. The welcome cards in `src/components/Intro.astro`, `pieces` in `src/config.ts` with your
+   content folder renamed to match, and the pieces' book in `src/lib/identity.ts`.
 6. Run `pnpm verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
    Webmaster Tools.
 
