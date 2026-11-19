@@ -60,11 +60,25 @@
 
   /* Short screens (small phones, landscape): a little more room so even the 15-line sonnet 99 fits. */
   @media (max-height: 780px) {
+    /* A slimmer header (3.6rem) so the 4rem top padding still clears it. */
+    body.feed header.site nav { padding-block: 1rem; }
     .card { padding-block: 4rem 2rem; }
     .verse { line-height: 1.55; }
     .about { line-height: 1.45; }
     .about h2 { margin-block-start: 1rem; }
     .about p, .about ul { margin-block: 0.6rem; }
+  }
+
+  /* Small phones (iPhone SE and smaller Androids): the welcome cards tighten again to stay one screen. */
+  @media (max-height: 700px) {
+    body.feed header.site nav { padding-block: 0.75rem; }
+    .card { padding-block: 3.5rem 1.25rem; }
+    .intro h1 { font-size: 1.75rem; }
+    .about { font-size: 0.9rem; line-height: 1.4; }
+    .about .lead { font-size: 1.1em; }
+    .about h2 { margin-block-start: 0.75rem; }
+    .about li + li { margin-block-start: 0.2rem; }
+    .about pre { margin-block: 0.5rem; padding: 0.5rem 0.75rem; }
   }
 }
 
