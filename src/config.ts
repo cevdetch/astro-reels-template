@@ -6,11 +6,11 @@ import type { PersonRef } from './lib/structured-data.ts';
 /**
  * What the pieces are called and who made them. `name` is the content folder
  * (src/content/sonnets/), the collection and the URL segment (/sonnets/18/): lowercase letters,
- * digits and hyphens, starting with a letter, and not "page", which the feed's own pages use.
- * A piece's page is headed "Sonnet 18" and signed with the creator, who is also the author in its
- * structured data; links and page cards say "sonnets 21–40". `plural` is written as it reads
- * mid-sentence. `book` is the book the pieces come from, named in each piece's structured data;
- * leave it out when they belong to none.
+ * digits and hyphens, starting with a letter, and neither "page", which the feed's own pages use,
+ * nor the first part of `feedBase`. A piece's page is headed "Sonnet 18" and signed with the
+ * creator, who is also the author in its structured data; links and page cards say
+ * "sonnets 21–40". `plural` is written as it reads mid-sentence. `book` is the book the pieces
+ * come from, named in each piece's structured data; leave it out when they belong to none.
  */
 const pieces = {
   name: 'sonnets',

@@ -43,6 +43,13 @@ test('no published pieces names the folder, the setting and drafts', () => {
     { message: 'No published pieces in src/content/poems/. Set pieces.name in src/config.ts to the name of your content folder, and check that not every piece is a draft.' });
 });
 
+test('the name cannot be where the feed lives', () => {
+  assert.match(pieceNameProblem('reels', '/reels/') ?? '', /feedBase/);
+  assert.equal(pieceNameProblem('poems', '/reels/'), undefined);
+  assert.equal(pieceNameProblem('poems', '/'), undefined);
+  assert.equal(pieceNameProblem('poems', '/poems-feed/'), undefined);
+});
+
 test('name errors end without a full stop, because Astro adds its own', () => {
   for (const name of ['Poems', 'page']) assert.doesNotMatch(pieceNameProblem(name) ?? 'missing', /\.$/, name);
 });

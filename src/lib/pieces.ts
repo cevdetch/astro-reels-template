@@ -24,11 +24,12 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
 export const piecePath = (n: number, { name }: Pick<SiteConfig['pieces'], 'name'> = siteConfig.pieces): string => `/${name}/${n}/`;
 
 /** Why `pieces.name` cannot name a content folder and URL segment, or nothing when it can. */
-export function pieceNameProblem(name: string): string | undefined {
+export function pieceNameProblem(name: string, feedBase: string = siteConfig.feedBase): string | undefined {
   if (!/^[a-z][a-z0-9-]*$/.test(name)) {
     return `pieces.name in src/config.ts names the content folder and the URL segment, so it takes lowercase letters, digits and hyphens, starting with a letter (got "${name}")`;
   }
   if (name === 'page') return 'pieces.name in src/config.ts cannot be "page": /page/2/ is the second feed page';
+  if (feedBase.split('/')[1] === name) return `pieces.name in src/config.ts cannot be "${name}": feedBase puts the feed at ${feedBase}`;
   return undefined;
 }
 
