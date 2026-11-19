@@ -3,28 +3,28 @@
 
   /* One card per screen; the browser's own keys and wheel move card by card. */
   html:has(body.feed) { scroll-snap-type: y mandatory; scroll-padding-block: env(safe-area-inset-top) env(safe-area-inset-bottom); }
-  body.feed header.site { position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 1; max-inline-size: none; background: color-mix(in srgb, var(--bg) 88%, transparent); }
+  body.feed header.site { position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 1; background: color-mix(in srgb, var(--bg) 88%, transparent); }
   /* Cards bring their own padding: the feed's, and a piece page's single card, get the full width. */
   body.feed main, main:has(> .card:only-child) { max-inline-size: none; padding: 0; }
   /* The footer follows the last card and snaps to the bottom of the screen. */
-  body.feed footer.site { scroll-snap-align: end; border-block-start: 1px solid var(--rule); max-inline-size: none; text-align: center; }
+  body.feed footer.site { scroll-snap-align: end; border-block-start: 1px solid var(--rule); text-align: center; }
   /* A piece's own page: its card fills the space between header and footer, so the page does not
-     scroll when the piece fits. Header and footer keep the 42rem frame. */
+     scroll when the piece fits. */
   body:has(> main > .card:only-child) { display: flex; flex-direction: column; min-block-size: 100dvh; }
-  body:has(> main > .card:only-child) > :is(header, footer) { inline-size: min(100% - 3rem, 42rem); }
   main:has(> .card:only-child) { flex: 1; display: grid; inline-size: 100%; }
   main > .card:only-child { min-block-size: 0; padding-block: 1.5rem 2.5rem; content-visibility: visible; }
 
   .card {
     display: grid; place-items: center;
-    min-block-size: 100dvh; padding: 4.5rem 1.5rem 3rem; box-sizing: border-box;
+    min-block-size: 100dvh; padding: 4.5rem var(--gutter) 3rem; box-sizing: border-box;
     scroll-snap-align: start; scroll-snap-stop: always;
     content-visibility: auto; contain-intrinsic-size: auto 100dvh;
   }
   .card + .card { border-block-start: 1px solid var(--rule); }
 
   /* Palatino and its free clones (P052, TeX Gyre Pagella) first, then Android's own serif. */
-  .poem { max-inline-size: 34rem; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", P052, "TeX Gyre Pagella", "URW Palladio L", Georgia, "Noto Serif", serif; }
+  /* The full column, not the longest line, so the left edge stays put from piece to piece and lines up with the header. */
+  .poem { inline-size: min(100%, var(--measure)); font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", P052, "TeX Gyre Pagella", "URW Palladio L", Georgia, "Noto Serif", serif; }
   /* A running head, as in a printed book: small, spaced capitals, so the verse stays the largest text. */
   .number { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.8125rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; }
   .number:has(+ .byline) { margin-block-end: 0.25rem; }
@@ -56,10 +56,6 @@
 
   @media (prefers-reduced-motion: reduce) {
     html:has(body.feed) { scroll-snap-type: y proximity; }
-  }
-
-  @media (max-width: 30rem) {
-    .card { padding-inline: 1rem; }
   }
 
   /* Short screens (small phones, landscape): a little more room so even the 15-line sonnet 99 fits. */
