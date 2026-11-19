@@ -14,10 +14,11 @@ export const siteConfig: SiteConfig = {
   /** Credit for the content, shown on the welcome cards. */
   credit: { text: 'Text from Project Gutenberg', href: 'https://www.gutenberg.org/ebooks/1041' },
   /**
-   * What one piece is called and who made it: a piece's page is headed "Sonnet 18" and signed with
-   * the creator, who is also the author in its structured data.
+   * What the pieces are called and who made them: a piece's page is headed "Sonnet 18" and signed
+   * with the creator, who is also the author in its structured data; links and page cards say
+   * "sonnets 21–40". `plural` is written as it reads mid-sentence.
    */
-  pieces: { label: 'Sonnet', creator: 'William Shakespeare' },
+  pieces: { label: 'Sonnet', plural: 'sonnets', creator: 'William Shakespeare' },
   /**
    * Whether search engines index each piece's page and the feed pages after the first. Leave it
    * false for demo text or text published elsewhere, such as these sonnets: those pages then carry
@@ -43,7 +44,7 @@ export interface SiteConfig {
   feedBase: string;
   intro: string;
   credit: { text: string; href: string };
-  pieces: { label: string; creator: string };
+  pieces: { label: string; plural: string; creator: string };
   indexPieces: boolean;
   /** `url` is your home page; `<url>#person` identifies you in the structured data unless you set `id`. */
   author?: PersonRef;

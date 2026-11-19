@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import sharp from 'sharp';
 import { siteConfig } from '../src/config.ts';
+import { pieceWords } from '../src/lib/pieces.ts';
 import { HOME_TITLE, SITE_NAME } from '../src/lib/seo.ts';
 
 const dist = new URL('../dist/', import.meta.url);
@@ -162,6 +163,20 @@ test('a feed card names the piece and shows its place in the collection', () => 
   assert.equal(text(h2), `${siteConfig.pieces.label} 18 of 154`);
   assert.match(h2, new RegExp(`<span class="visually-hidden">${esc(siteConfig.pieces.label)} </span>18`));
   assert.doesNotMatch(html, /class="byline"/);
+});
+
+test("every piece and page string in the feed comes from the config's words", () => {
+  const words = pieceWords();
+  const page2 = read('page/2/index.html');
+  assert.match(page2, new RegExp(`aria-label="${words.previousGroup}"`));
+  assert.match(page2, new RegExp(`<h1 class="visually-hidden">${esc(SITE_NAME)}: ${words.range(21, 40)}</h1>`));
+  assert.match(page2, new RegExp(`aria-label="${words.nextGroup}"`));
+  assert.match(page2, new RegExp(`<meta name="description" content="${esc(words.pageDescription(21, 40, 154))}">`));
+  const sonnet18 = read('sonnets/18/index.html');
+  assert.match(sonnet18, new RegExp(`aria-label="${words.more}"`));
+  assert.match(sonnet18, new RegExp(`rel="prev">← ${words.piece(17)}</a>`));
+  assert.match(sonnet18, new RegExp(`rel="next">${words.piece(19)} →</a>`));
+  assert.match(read('index.html'), new RegExp(`<nav class="card-links" aria-label="${words.piece(3)}">`));
 });
 
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {

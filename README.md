@@ -89,9 +89,10 @@ and clone it.
    line of the body is a line on the page. Start a line with two spaces or two em spaces to
    indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
    Markdown.
-6. **Words.** `pieces` in `src/config.ts` names one piece and its creator: a piece's page is
-   headed "Sonnet 18" and signed "William Shakespeare", feed cards read "18 of 154", the share
-   images use the label, and the structured data names the creator as the author. The section is
+6. **Words.** `pieces` in `src/config.ts` names the pieces and their creator: a piece's page is
+   headed "Sonnet 18" and signed "William Shakespeare", feed cards read "18 of 154", links and
+   page cards say "sonnets 21–40", the share images use the label, and the structured data names
+   the creator as the author. `src/lib/pieces.ts` builds every such string from it. The section is
    called `sonnets` in the content folder, `src/content.config.ts`, the routes under
    `src/pages/sonnets/`, `src/lib/sonnets.ts` and `PIECES_PATH` in `src/lib/seo.ts`, and the
    book the pieces belong to is set in `src/lib/identity.ts`. Rename them together for your own

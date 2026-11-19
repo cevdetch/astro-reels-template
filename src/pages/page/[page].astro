@@ -2,6 +2,7 @@
 import FeedPage from '../../components/FeedPage.astro';
 import Layout from '../../layouts/Layout.astro';
 import { pageCount, pageRange } from '../../lib/feed.ts';
+import { pieceWords } from '../../lib/pieces.ts';
 import { getSonnets, type Sonnet } from '../../lib/sonnets.ts';
 import '../../styles/feed.css';
 
@@ -16,6 +17,6 @@ const page = Number(Astro.params.page);
 const { first, last } = pageRange(page, sonnets.length);
 ---
 
-<Layout title={`Page ${page}: ${first}–${last}`} description={`Sonnets ${first} to ${last} of Shakespeare's ${sonnets.length}, one per screen.`} bodyClass="feed">
+<Layout title={`Page ${page}: ${first}–${last}`} description={pieceWords().pageDescription(first, last, sonnets.length)} bodyClass="feed">
   <FeedPage page={page} sonnets={sonnets} />
 </Layout>

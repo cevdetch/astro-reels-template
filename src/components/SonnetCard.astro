@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from '../config.ts';
 import { feedHref, pageHref, pageOf } from '../lib/feed.ts';
+import { pieceWords } from '../lib/pieces.ts';
 import { sonnetPath, type Sonnet } from '../lib/sonnets.ts';
 import { stanzas } from '../lib/verse.ts';
 
@@ -10,6 +11,7 @@ const n = sonnet.data.number;
 const verse = stanzas(sonnet.body ?? '');
 const Heading = level;
 const { label, creator } = siteConfig.pieces;
+const words = pieceWords();
 const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : pageHref(pageOf(n + 1))) : undefined;
 ---
 
@@ -18,7 +20,7 @@ const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : pageHref(p
     {context === 'feed' && <Heading class="number" id={`sonnet-${n}`}><span class="visually-hidden">{label} </span>{n} of {total}</Heading>}
     {context === 'page' && (
       <>
-        <Heading class="number" id={`sonnet-${n}`}>{`${label} ${n}`}</Heading>
+        <Heading class="number" id={`sonnet-${n}`}>{words.piece(n)}</Heading>
         <p class="byline">{creator}</p>
       </>
     )}
@@ -28,16 +30,16 @@ const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : pageHref(p
       ))}
     </div>
     {context === 'feed' && (
-      <nav class="card-links" aria-label={`Sonnet ${n}`}>
+      <nav class="card-links" aria-label={words.piece(n)}>
         {next && <a href={next}>Next</a>}
         <a href={sonnetPath(n)}>Open</a>
       </nav>
     )}
     {context === 'page' && (
-      <nav class="card-links" aria-label="More sonnets">
-        {n > 1 && <a href={sonnetPath(n - 1)} rel="prev">← Sonnet {n - 1}</a>}
+      <nav class="card-links" aria-label={words.more}>
+        {n > 1 && <a href={sonnetPath(n - 1)} rel="prev">{`← ${words.piece(n - 1)}`}</a>}
         <a href={feedHref(n)}>See it in the feed</a>
-        {n < total && <a href={sonnetPath(n + 1)} rel="next">Sonnet {n + 1} →</a>}
+        {n < total && <a href={sonnetPath(n + 1)} rel="next">{`${words.piece(n + 1)} →`}</a>}
       </nav>
     )}
   </div>

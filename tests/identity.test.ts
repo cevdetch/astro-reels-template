@@ -41,7 +41,7 @@ test('a sonnet is a CreativeWork by Shakespeare, part of the 1609 book', () => {
 });
 
 test('a piece credits the creator named in the config', () => {
-  const [work] = nodes(sonnetJsonLd({ url: 'https://example.test/sonnets/1/', name: 'Sonnet 1', description: 'x' }, { pieces: { label: 'Poem', creator: 'A. Poet' } }));
+  const [work] = nodes(sonnetJsonLd({ url: 'https://example.test/sonnets/1/', name: 'Sonnet 1', description: 'x' }, { pieces: { label: 'Poem', plural: 'poems', creator: 'A. Poet' } }));
   assert.deepEqual(work?.['author'], { '@type': 'Person', name: 'A. Poet' });
 });
 
