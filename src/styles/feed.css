@@ -4,7 +4,8 @@
   /* One card per screen; the browser's own keys and wheel move card by card. */
   html:has(body.feed) { scroll-snap-type: y mandatory; scroll-padding-block: env(safe-area-inset-top) env(safe-area-inset-bottom); }
   body.feed header.site { position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 1; max-inline-size: none; background: color-mix(in srgb, var(--bg) 88%, transparent); }
-  body.feed main { max-inline-size: none; padding: 0; }
+  /* Cards bring their own padding: the feed's, and a piece page's single card, get the full width. */
+  body.feed main, main:has(> .card:only-child) { max-inline-size: none; padding: 0; }
   /* The footer follows the last card and snaps to the bottom of the screen. */
   body.feed footer.site { scroll-snap-align: end; border-block-start: 1px solid var(--rule); max-inline-size: none; text-align: center; }
 
@@ -16,8 +17,10 @@
   }
   .card + .card { border-block-start: 1px solid var(--rule); }
 
-  .poem { max-inline-size: 34rem; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
-  .number { margin: 0 0 1rem; color: var(--muted); font-size: 1rem; font-weight: 400; letter-spacing: 0.08em; }
+  /* Palatino and its free clones (P052, TeX Gyre Pagella) first, then Android's own serif. */
+  .poem { max-inline-size: 34rem; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", P052, "TeX Gyre Pagella", "URW Palladio L", Georgia, "Noto Serif", serif; }
+  /* A running head, as in a printed book: small, spaced capitals, so the verse stays the largest text. */
+  .number { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.8125rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; }
   .number:has(+ .byline) { margin-block-end: 0.25rem; }
   .byline { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.875rem; font-style: italic; }
   /* Sized to the screen so a sonnet's 40-50 character lines mostly fit whole on a phone. */
