@@ -55,7 +55,8 @@ test('the sitemap lists only the home page, without unused namespaces', () => {
 
 test('only the home page is indexable; piece and later feed pages are noindex, follow', () => {
   assert.doesNotMatch(read('index.html'), /<meta name="robots"/);
-  for (const path of ['page/2/index.html', 'page/8/index.html', 'sonnets/1/index.html', 'sonnets/154/index.html']) {
+  const pieces = siteConfig.pieces.name;
+  for (const path of ['page/2/index.html', 'page/8/index.html', `${pieces}/1/index.html`, `${pieces}/154/index.html`]) {
     const html = read(path);
     assert.match(html, /<meta name="robots" content="noindex, follow">/, path);
     assert.match(html, /<link rel="canonical" href=/, path);
@@ -95,7 +96,7 @@ test('the home page declares the WebSite, published by the configured author', (
 test('every page ends with the author and source credit from the config', () => {
   const { author, repository } = siteConfig;
   assert.ok(author && repository);
-  for (const path of ['index.html', 'page/8/index.html', 'sonnets/18/index.html', '404.html']) {
+  for (const path of ['index.html', 'page/8/index.html', `${siteConfig.pieces.name}/18/index.html`, '404.html']) {
     const footer = read(path).match(/<footer class="site">(.*?)<\/footer>/s)?.[1];
     assert.equal(footer, `<p>By <a href="${author.url}">${author.name}</a> · <a href="${repository}">Source code</a></p>`, path);
   }
