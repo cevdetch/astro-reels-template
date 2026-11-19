@@ -89,11 +89,13 @@ and clone it.
    line of the body is a line on the page. Start a line with two spaces or two em spaces to
    indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
    Markdown.
-6. **Words.** The section is called `sonnets` in the content folder, `src/content.config.ts`,
-   the routes under `src/pages/sonnets/`, `src/lib/sonnets.ts` and `PIECES_PATH` in
-   `src/lib/seo.ts`. The share-image label lives in `SECTIONS` in `src/lib/social-card.ts`, and
-   the pieces' author in their structured data in `src/lib/identity.ts`. Rename them together for
-   your own kind of piece.
+6. **Words.** `pieces` in `src/config.ts` names one piece and its creator: a piece's page is
+   headed "Sonnet 18" and signed "William Shakespeare", feed cards read "18 of 154", the share
+   images use the label, and the structured data names the creator as the author. The section is
+   called `sonnets` in the content folder, `src/content.config.ts`, the routes under
+   `src/pages/sonnets/`, `src/lib/sonnets.ts` and `PIECES_PATH` in `src/lib/seo.ts`, and the
+   book the pieces belong to is set in `src/lib/identity.ts`. Rename them together for your own
+   kind of piece.
 7. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
 
 ## Deploy
@@ -136,8 +138,8 @@ What a fork must set before launch:
 3. `author` and `repository`, or remove them. The build warns while `author` still credits
    cevdet.ch from another address.
 4. `indexPieces`, as above.
-5. The welcome cards in `src/components/Intro.astro`, and the pieces' author in
-   `src/lib/identity.ts`.
+5. The welcome cards in `src/components/Intro.astro`, `pieces` in `src/config.ts`, and the
+   pieces' book in `src/lib/identity.ts`.
 6. Run `pnpm verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
    Webmaster Tools.
 

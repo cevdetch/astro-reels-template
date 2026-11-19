@@ -40,6 +40,11 @@ test('a sonnet is a CreativeWork by Shakespeare, part of the 1609 book', () => {
   }]);
 });
 
+test('a piece credits the creator named in the config', () => {
+  const [work] = nodes(sonnetJsonLd({ url: 'https://example.test/sonnets/1/', name: 'Sonnet 1', description: 'x' }, { pieces: { label: 'Poem', creator: 'A. Poet' } }));
+  assert.deepEqual(work?.['author'], { '@type': 'Person', name: 'A. Poet' });
+});
+
 test('a "<" in the data cannot close the script element', () => {
   const json = sonnetJsonLd({ url: 'https://example.test/sonnets/1/', name: '</script>', description: 'a < b' });
   assert.doesNotMatch(json, /</);

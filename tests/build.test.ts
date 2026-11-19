@@ -146,6 +146,24 @@ test('a sonnet page: title, first-line description, couplet indentation, neighbo
   assert.doesNotMatch(read('sonnets/154/index.html'), /href="\/sonnets\/155\/"/);
 });
 
+const text = (html: string) => html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+test('a sonnet page names the piece and its creator in view', () => {
+  const html = read('sonnets/18/index.html');
+  const h1 = html.match(/<h1\b[^>]*>(.*?)<\/h1>/s)?.[1] ?? '';
+  assert.equal(text(h1), `${siteConfig.pieces.label} 18`);
+  assert.doesNotMatch(h1, /visually-hidden/);
+  assert.match(html, new RegExp(`<p class="byline">${esc(siteConfig.pieces.creator)}</p>`));
+});
+
+test('a feed card names the piece and shows its place in the collection', () => {
+  const html = read('index.html');
+  const h2 = html.match(/<h2 class="number" id="sonnet-18">(.*?)<\/h2>/s)?.[1] ?? '';
+  assert.equal(text(h2), `${siteConfig.pieces.label} 18 of 154`);
+  assert.match(h2, new RegExp(`<span class="visually-hidden">${esc(siteConfig.pieces.label)} </span>18`));
+  assert.doesNotMatch(html, /class="byline"/);
+});
+
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {
   assert.deepEqual(jsonLd('sonnets/18/index.html'), [{
     '@type': 'CreativeWork', '@id': `${origin}/sonnets/18/#work`, url: `${origin}/sonnets/18/`, name: 'Sonnet 18',

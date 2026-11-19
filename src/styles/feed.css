@@ -18,6 +18,8 @@
 
   .poem { max-inline-size: 34rem; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
   .number { margin: 0 0 1rem; color: var(--muted); font-size: 1rem; font-weight: 400; letter-spacing: 0.08em; }
+  .number:has(+ .byline) { margin-block-end: 0.25rem; }
+  .byline { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.875rem; font-style: italic; }
   /* Sized to the screen so a sonnet's 40-50 character lines mostly fit whole on a phone. */
   .verse { font-size: clamp(0.875rem, 3.85vw, 1.3rem); line-height: 1.7; }
   .verse p { margin: 0; }

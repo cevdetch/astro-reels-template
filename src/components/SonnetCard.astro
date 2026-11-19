@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../config.ts';
 import { feedHref, pageHref, pageOf } from '../lib/feed.ts';
 import { sonnetPath, type Sonnet } from '../lib/sonnets.ts';
 import { stanzas } from '../lib/verse.ts';
@@ -8,12 +9,19 @@ const { sonnet, total, level = 'h2', context } = Astro.props;
 const n = sonnet.data.number;
 const verse = stanzas(sonnet.body ?? '');
 const Heading = level;
+const { label, creator } = siteConfig.pieces;
 const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : pageHref(pageOf(n + 1))) : undefined;
 ---
 
 <section class="card sonnet" id={context === 'feed' ? String(n) : undefined} aria-labelledby={`sonnet-${n}`}>
   <div class="poem">
-    <Heading class="number" id={`sonnet-${n}`}><span class="visually-hidden">Sonnet </span>{n}</Heading>
+    {context === 'feed' && <Heading class="number" id={`sonnet-${n}`}><span class="visually-hidden">{label} </span>{n} of {total}</Heading>}
+    {context === 'page' && (
+      <>
+        <Heading class="number" id={`sonnet-${n}`}>{`${label} ${n}`}</Heading>
+        <p class="byline">{creator}</p>
+      </>
+    )}
     <div class="verse">
       {verse.map((stanza) => (
         <p>{stanza.map((line) => <span class:list={['line', { indent: line.indent }]}>{line.text}</span>)}</p>

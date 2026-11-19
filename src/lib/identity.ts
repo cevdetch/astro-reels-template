@@ -9,12 +9,12 @@ export function homeJsonLd(origin: URL, { author }: Pick<SiteConfig, 'author'> =
   })));
 }
 
-/** A piece's page. The pieces are Shakespeare's: change the author and the book along with them. */
-export function sonnetJsonLd(input: { url: string; name: string; description: string }): string {
+/** A piece's page, by the configured creator. The book is Shakespeare's: change it along with the pieces. */
+export function sonnetJsonLd(input: { url: string; name: string; description: string }, { pieces }: Pick<SiteConfig, 'pieces'> = siteConfig): string {
   return serializeJsonLd(graph(creativeWorkNode({
     ...input,
     inLanguage: 'en',
-    author: { '@type': 'Person', name: 'William Shakespeare' },
+    author: { '@type': 'Person', name: pieces.creator },
     partOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
   })));
 }
