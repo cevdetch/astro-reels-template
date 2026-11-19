@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from '../config.ts';
-import { feedHref, pageHref, pageOf } from '../lib/feed.ts';
+import { feedHref, pageOf } from '../lib/feed.ts';
 import { pieceWords } from '../lib/pieces.ts';
 import { sonnetPath, type Sonnet } from '../lib/sonnets.ts';
 import { stanzas } from '../lib/verse.ts';
@@ -12,7 +12,8 @@ const verse = stanzas(sonnet.body ?? '');
 const Heading = level;
 const { label, creator } = siteConfig.pieces;
 const words = pieceWords();
-const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : pageHref(pageOf(n + 1))) : undefined;
+// The next piece: on this page by its anchor, on the next page by its place there.
+const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n + 1)) : undefined;
 ---
 
 <section class="card sonnet" id={context === 'feed' ? String(n) : undefined} aria-labelledby={`sonnet-${n}`}>

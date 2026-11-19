@@ -119,7 +119,7 @@ test('feed page 1: intro card, sonnets 1-20 with ids, a next card, no previous c
   const ids = [...html.matchAll(/<section class="card sonnet" id="(\d+)"/g)].map((m) => Number(m[1]));
   assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => i + 1));
   assert.match(html, /class="card intro"/);
-  assert.match(html, /<a href="\/page\/2\/"[^>]*>Next: sonnets 21–40/);
+  assert.match(html, /<a href="\/page\/2\/#21"[^>]*>Next: sonnets 21–40/);
   assert.doesNotMatch(html, /class="card previous"/);
 });
 
@@ -163,6 +163,13 @@ test('a feed card names the piece and shows its place in the collection', () => 
   assert.equal(text(h2), `${siteConfig.pieces.label} 18 of 154`);
   assert.match(h2, new RegExp(`<span class="visually-hidden">${esc(siteConfig.pieces.label)} </span>18`));
   assert.doesNotMatch(html, /class="byline"/);
+});
+
+test('turning forward lands on the first piece of the next page, not on its previous-page card', () => {
+  const card20 = read('index.html').match(/<section class="card sonnet" id="20".*?<\/section>/s)?.[0] ?? '';
+  assert.match(card20, /<a href="\/page\/2\/#21">Next<\/a>/);
+  assert.match(read('page/7/index.html'), /<a href="\/page\/8\/#141" rel="next">/);
+  assert.match(read('page/2/index.html'), /<a href="\/" rel="prev">← Previous: sonnets 1–20<\/a>/);
 });
 
 test("every piece and page string in the feed comes from the config's words", () => {
