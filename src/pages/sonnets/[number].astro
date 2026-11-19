@@ -1,22 +1,23 @@
 ---
-import SonnetCard from '../../components/SonnetCard.astro';
+import PieceCard from '../../components/PieceCard.astro';
 import Layout from '../../layouts/Layout.astro';
-import { sonnetJsonLd } from '../../lib/identity.ts';
-import { getSonnets, sonnetPath, type Sonnet } from '../../lib/sonnets.ts';
+import { getPieces, type Piece } from '../../lib/collection.ts';
+import { pieceJsonLd } from '../../lib/identity.ts';
+import { piecePath } from '../../lib/pieces.ts';
 import '../../styles/feed.css';
 
 export async function getStaticPaths() {
-  const sonnets = await getSonnets();
-  return sonnets.map((sonnet) => ({ params: { number: String(sonnet.data.number) }, props: { sonnet, total: sonnets.length } }));
+  const pieces = await getPieces();
+  return pieces.map((piece) => ({ params: { number: String(piece.data.number) }, props: { piece, total: pieces.length } }));
 }
 
-interface Props { sonnet: Sonnet; total: number }
-const { sonnet, total } = Astro.props;
+interface Props { piece: Piece; total: number }
+const { piece, total } = Astro.props;
 if (!Astro.site) throw new Error('Set the origin in src/config.ts.');
-const { title, description, number } = sonnet.data;
-const jsonLd = sonnetJsonLd({ url: new URL(sonnetPath(number), Astro.site).href, name: title, description });
+const { title, description, number } = piece.data;
+const jsonLd = pieceJsonLd({ url: new URL(piecePath(number), Astro.site).href, name: title, description });
 ---
 
 <Layout title={title} description={description} ogType="article" jsonLd={jsonLd}>
-  <SonnetCard sonnet={sonnet} total={total} level="h1" context="page" />
+  <PieceCard piece={piece} total={total} level="h1" context="page" />
 </Layout>

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pieceWords } from '../src/lib/pieces.ts';
+import { pieceWords, piecePath } from '../src/lib/pieces.ts';
 
 test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   const words = pieceWords();
@@ -18,4 +18,8 @@ test("a fork's words reach every string", () => {
   const all = [words.piece(3), words.range(1, 20), words.more, words.previousGroup, words.nextGroup, words.pageDescription(1, 20, 40)];
   assert.deepEqual(all, ['Poem 3', 'poems 1–20', 'More poems', 'Previous poems', 'Next poems', "Poems 1 to 20 of A. Poet's 40, one per screen."]);
   for (const s of all) assert.doesNotMatch(s, /sonnet|Shakespeare/i);
+});
+
+test('a piece lives at its own path', () => {
+  assert.equal(piecePath(18), '/sonnets/18/');
 });

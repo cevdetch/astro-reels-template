@@ -1,14 +1,14 @@
 ---
 import { siteConfig } from '../config.ts';
+import type { Piece } from '../lib/collection.ts';
 import { feedHref, pageOf } from '../lib/feed.ts';
-import { pieceWords } from '../lib/pieces.ts';
-import { sonnetPath, type Sonnet } from '../lib/sonnets.ts';
+import { pieceWords, piecePath } from '../lib/pieces.ts';
 import { stanzas } from '../lib/verse.ts';
 
-interface Props { sonnet: Sonnet; total: number; level?: 'h1' | 'h2'; context: 'feed' | 'page' }
-const { sonnet, total, level = 'h2', context } = Astro.props;
-const n = sonnet.data.number;
-const verse = stanzas(sonnet.body ?? '');
+interface Props { piece: Piece; total: number; level?: 'h1' | 'h2'; context: 'feed' | 'page' }
+const { piece, total, level = 'h2', context } = Astro.props;
+const n = piece.data.number;
+const verse = stanzas(piece.body ?? '');
 const Heading = level;
 const { label, creator } = siteConfig.pieces;
 const words = pieceWords();
@@ -16,12 +16,12 @@ const words = pieceWords();
 const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n + 1)) : undefined;
 ---
 
-<section class="card sonnet" id={context === 'feed' ? String(n) : undefined} aria-labelledby={`sonnet-${n}`}>
+<section class="card piece" id={context === 'feed' ? String(n) : undefined} aria-labelledby={`piece-${n}`}>
   <div class="poem">
-    {context === 'feed' && <Heading class="number" id={`sonnet-${n}`}><span class="visually-hidden">{label} </span>{n} of {total}</Heading>}
+    {context === 'feed' && <Heading class="number" id={`piece-${n}`}><span class="visually-hidden">{label} </span>{n} of {total}</Heading>}
     {context === 'page' && (
       <>
-        <Heading class="number" id={`sonnet-${n}`}>{words.piece(n)}</Heading>
+        <Heading class="number" id={`piece-${n}`}>{words.piece(n)}</Heading>
         <p class="byline">{creator}</p>
       </>
     )}
@@ -34,14 +34,14 @@ const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n
       <nav class="card-links" aria-label={words.piece(n)}>
         {next && <a href={next}>Next<span class="visually-hidden">{`: ${words.piece(n + 1)}`}</span> ↓</a>}
         {!next && <a href={feedHref(1)}>Back to the first ↑</a>}
-        <a href={sonnetPath(n)}><span class="visually-hidden">{`${words.pieceOwner(n)} `}</span>Own page →</a>
+        <a href={piecePath(n)}><span class="visually-hidden">{`${words.pieceOwner(n)} `}</span>Own page →</a>
       </nav>
     )}
     {context === 'page' && (
       <nav class="card-links" aria-label={words.more}>
-        {n > 1 && <a href={sonnetPath(n - 1)} rel="prev">{`← ${words.piece(n - 1)}`}</a>}
+        {n > 1 && <a href={piecePath(n - 1)} rel="prev">{`← ${words.piece(n - 1)}`}</a>}
         <a href={feedHref(n)}>See it in the feed</a>
-        {n < total && <a href={sonnetPath(n + 1)} rel="next">{`${words.piece(n + 1)} →`}</a>}
+        {n < total && <a href={piecePath(n + 1)} rel="next">{`${words.piece(n + 1)} →`}</a>}
       </nav>
     )}
   </div>

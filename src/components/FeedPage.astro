@@ -1,18 +1,18 @@
 ---
 import Intro from './Intro.astro';
-import SonnetCard from './SonnetCard.astro';
+import PieceCard from './PieceCard.astro';
 import { siteConfig } from '../config.ts';
+import type { Piece } from '../lib/collection.ts';
 import { feedHref, pageCount, pageHref, pageRange, PAGE_SIZE } from '../lib/feed.ts';
 import { pieceWords } from '../lib/pieces.ts';
-import type { Sonnet } from '../lib/sonnets.ts';
 import '../styles/feed.css';
 
-interface Props { page: number; sonnets: Sonnet[] }
-const { page, sonnets } = Astro.props;
-const total = sonnets.length;
+interface Props { page: number; pieces: Piece[] }
+const { page, pieces } = Astro.props;
+const total = pieces.length;
 const pages = pageCount(total);
 const { first, last } = pageRange(page, total);
-const shown = sonnets.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+const shown = pieces.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 const before = page > 1 ? pageRange(page - 1, total) : undefined;
 const after = page < pages ? pageRange(page + 1, total) : undefined;
 const words = pieceWords();
@@ -26,7 +26,7 @@ const words = pieceWords();
       <a href={pageHref(page - 1)} rel="prev">{`← Previous: ${words.range(before.first, before.last)}`}</a>
     </section>
   )}
-  {shown.map((sonnet) => <SonnetCard sonnet={sonnet} total={total} context="feed" />)}
+  {shown.map((piece) => <PieceCard piece={piece} total={total} context="feed" />)}
   {after && (
     <section class="card next" aria-label={words.nextGroup}>
       <a href={feedHref(after.first)} rel="next">{`Next: ${words.range(after.first, after.last)} →`}</a>

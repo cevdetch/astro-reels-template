@@ -16,7 +16,7 @@ const GROUND = '#101210';
 const TEXT = '#FFFFFF';
 const MUTED = 'rgba(255,255,255,0.66)';
 const RULE = 'rgba(255,255,255,0.14)';
-/** Section folder -> eyebrow label for piece pages, e.g. { sonnets: 'Sonnet' }. */
+/** Section folder -> eyebrow label for piece pages, e.g. { poems: 'Poem' }. */
 export const SECTIONS: Readonly<Record<string, string>> = { sonnets: siteConfig.pieces.label };
 
 const div = (style: Record<string, string | number>, children: NonNullable<CardNode['props']['children']>): CardNode =>

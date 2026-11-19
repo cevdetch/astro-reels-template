@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { siteConfig } from '../src/config.ts';
 import { authorCreditWarning } from '../src/integrations/author-credit.ts';
-import { homeJsonLd, sonnetJsonLd } from '../src/lib/identity.ts';
+import { homeJsonLd, pieceJsonLd } from '../src/lib/identity.ts';
 import { SITE_NAME } from '../src/lib/seo.ts';
 
 const nodes = (json: string): Record<string, unknown>[] => {
@@ -33,7 +33,7 @@ test('with no author, the WebSite names no publisher', () => {
 
 test('a sonnet is a CreativeWork by Shakespeare, part of the 1609 book', () => {
   const url = 'https://example.test/sonnets/18/';
-  assert.deepEqual(nodes(sonnetJsonLd({ url, name: 'Sonnet 18', description: 'Shall I compare thee to a summer’s day?' })), [{
+  assert.deepEqual(nodes(pieceJsonLd({ url, name: 'Sonnet 18', description: 'Shall I compare thee to a summer’s day?' })), [{
     '@type': 'CreativeWork', '@id': `${url}#work`, url, name: 'Sonnet 18', description: 'Shall I compare thee to a summer’s day?',
     inLanguage: 'en', author: { '@type': 'Person', name: 'William Shakespeare' },
     isPartOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
@@ -41,12 +41,12 @@ test('a sonnet is a CreativeWork by Shakespeare, part of the 1609 book', () => {
 });
 
 test('a piece credits the creator named in the config', () => {
-  const [work] = nodes(sonnetJsonLd({ url: 'https://example.test/sonnets/1/', name: 'Sonnet 1', description: 'x' }, { pieces: { label: 'Poem', plural: 'poems', creator: 'A. Poet' } }));
+  const [work] = nodes(pieceJsonLd({ url: 'https://example.test/sonnets/1/', name: 'Sonnet 1', description: 'x' }, { pieces: { creator: 'A. Poet' } }));
   assert.deepEqual(work?.['author'], { '@type': 'Person', name: 'A. Poet' });
 });
 
 test('a "<" in the data cannot close the script element', () => {
-  const json = sonnetJsonLd({ url: 'https://example.test/sonnets/1/', name: '</script>', description: 'a < b' });
+  const json = pieceJsonLd({ url: 'https://example.test/sonnets/1/', name: '</script>', description: 'a < b' });
   assert.doesNotMatch(json, /</);
   assert.equal(nodes(json)[0]?.['name'], '</script>');
 });

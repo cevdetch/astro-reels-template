@@ -117,7 +117,7 @@ test('8 feed pages and 154 sonnet pages are built', () => {
 
 test('feed page 1: intro card, sonnets 1-20 with ids, a next card, no previous card', () => {
   const html = read('index.html');
-  const ids = [...html.matchAll(/<section class="card sonnet" id="(\d+)"/g)].map((m) => Number(m[1]));
+  const ids = [...html.matchAll(/<section class="card piece" id="(\d+)"/g)].map((m) => Number(m[1]));
   assert.deepEqual(ids, Array.from({ length: 20 }, (_, i) => i + 1));
   assert.match(html, /class="card intro"/);
   assert.match(html, /<a href="\/page\/2\/#21"[^>]*>Next: sonnets 21–40/);
@@ -126,7 +126,7 @@ test('feed page 1: intro card, sonnets 1-20 with ids, a next card, no previous c
 
 test('feed page 8: sonnets 141-154, a previous card, no next card, a self canonical', () => {
   const html = read('page/8/index.html');
-  const ids = [...html.matchAll(/<section class="card sonnet" id="(\d+)"/g)].map((m) => Number(m[1]));
+  const ids = [...html.matchAll(/<section class="card piece" id="(\d+)"/g)].map((m) => Number(m[1]));
   assert.deepEqual(ids, Array.from({ length: 14 }, (_, i) => i + 141));
   assert.match(html, /class="card previous"/);
   assert.doesNotMatch(html, /class="card next"/);
@@ -160,14 +160,14 @@ test('a sonnet page names the piece and its creator in view', () => {
 
 test('a feed card names the piece and shows its place in the collection', () => {
   const html = read('index.html');
-  const h2 = html.match(/<h2 class="number" id="sonnet-18">(.*?)<\/h2>/s)?.[1] ?? '';
+  const h2 = html.match(/<h2 class="number" id="piece-18">(.*?)<\/h2>/s)?.[1] ?? '';
   assert.equal(text(h2), `${siteConfig.pieces.label} 18 of 154`);
   assert.match(h2, new RegExp(`<span class="visually-hidden">${esc(siteConfig.pieces.label)} </span>18`));
   assert.doesNotMatch(html, /class="byline"/);
 });
 
 test('turning forward lands on the first piece of the next page, not on its previous-page card', () => {
-  const card20 = read('index.html').match(/<section class="card sonnet" id="20".*?<\/section>/s)?.[0] ?? '';
+  const card20 = read('index.html').match(/<section class="card piece" id="20".*?<\/section>/s)?.[0] ?? '';
   assert.match(card20, /<a href="\/page\/2\/#21">Next<span class="visually-hidden">: Sonnet 21<\/span> ↓<\/a>/);
   assert.match(read('page/7/index.html'), /<a href="\/page\/8\/#141" rel="next">/);
   assert.match(read('page/2/index.html'), /<a href="\/" rel="prev">← Previous: sonnets 1–20<\/a>/);
@@ -228,7 +228,7 @@ test('the welcome cards take their line and source credit from the config', () =
 
 test('the home page explains the template in its own words, before the first sonnet', () => {
   const html = read('index.html');
-  const own = html.slice(html.indexOf('<main'), html.indexOf('<section class="card sonnet"'));
+  const own = html.slice(html.indexOf('<main'), html.indexOf('<section class="card piece"'));
   const words = own.replace(/<[^>]+>/g, ' ').split(/\s+/).filter((w) => /\w/.test(w));
   assert.ok(words.length >= 250, `${words.length} words`);
   assert.match(own, /<code>pnpm create astro@latest --template cevdetch\/astro-reels-template<\/code>/);

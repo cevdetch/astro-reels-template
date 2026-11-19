@@ -8,7 +8,7 @@ export const pageOf = (n: number): number => Math.ceil(n / PAGE_SIZE);
 /** Feed page p: the feed base for page 1, `<base>page/<p>/` after it. */
 export const pageHref = (p: number): string => (p === 1 ? siteConfig.feedBase : `${siteConfig.feedBase}page/${p}/`);
 
-/** Where sonnet n sits in the feed. */
+/** Where piece n sits in the feed. */
 export const feedHref = (n: number): string => `${pageHref(pageOf(n))}#${n}`;
 
 export function pageRange(p: number, total: number): { first: number; last: number } {
