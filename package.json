@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "license": "MIT",
-  "packageManager": "pnpm@12.3.4",
+  "packageManager": "pnpm@12.21.0",
   "engines": {
     "node": ">=24.8.0"
   },
@@ -18,7 +18,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.4.2"
+    "astro": "^7.4.13"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
