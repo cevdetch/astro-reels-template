@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 /** The demo's own wording may name the sonnets; the code around it stays neutral. src/content/ is skipped. */
 const DEMO_FILES = new Set(['src/config.ts', 'src/components/Intro.astro']);
-const DEMO_LINES: Readonly<Record<string, RegExp>> = { 'src/lib/identity.ts': /Shakespeare's Sonnets/ };
+const DEMO_LINES: Readonly<Record<string, RegExp>> = {};
 
 const sources = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
   const path = join(dir, e.name);

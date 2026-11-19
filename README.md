@@ -96,8 +96,8 @@ and clone it.
    `noindex` rule, the sitemap and the share-card label following. `label`, `plural` and `creator`
    are the words: a piece's page is headed "Sonnet 18" and signed "William Shakespeare", feed
    cards read "18 of 154", and links and page cards say "sonnets 21–40". A name that cannot be a
-   folder and URL segment, or a folder with no pieces, fails the build. The book the demo's
-   pieces belong to is set in `src/lib/identity.ts`.
+   folder and URL segment, or a folder with no pieces, fails the build. `book` names the book the
+   pieces come from in their structured data; leave it out when they belong to none.
 7. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
 
 ## Deploy
@@ -140,8 +140,8 @@ What a fork must set before launch:
 3. `author` and `repository`, or remove them. The build warns while `author` still credits
    cevdet.ch from another address.
 4. `indexPieces`, as above.
-5. The welcome cards in `src/components/Intro.astro`, `pieces` in `src/config.ts` with your
-   content folder renamed to match, and the pieces' book in `src/lib/identity.ts`.
+5. The welcome cards in `src/components/Intro.astro`, and `pieces` in `src/config.ts` (including
+   its `book`) with your content folder renamed to match.
 6. Run `pnpm verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
    Webmaster Tools.
 

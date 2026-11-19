@@ -45,6 +45,15 @@ test('a piece credits the creator named in the config', () => {
   assert.deepEqual(work?.['author'], { '@type': 'Person', name: 'A. Poet' });
 });
 
+test('a piece belongs to the book named in the config, or to none', () => {
+  const input = { url: 'https://example.test/poems/1/', name: 'Poem 1', description: 'x' };
+  const [inBook] = nodes(pieceJsonLd(input, { pieces: { creator: 'A. Poet', book: { name: 'Collected Poems', datePublished: '2024' } } }));
+  assert.deepEqual(inBook?.['isPartOf'], { '@type': 'Book', name: 'Collected Poems', datePublished: '2024' });
+  const [loose] = nodes(pieceJsonLd(input, { pieces: { creator: 'A. Poet' } }));
+  assert.ok(loose);
+  assert.equal('isPartOf' in loose, false);
+});
+
 test('a "<" in the data cannot close the script element', () => {
   const json = pieceJsonLd({ url: 'https://example.test/sonnets/1/', name: '</script>', description: 'a < b' });
   assert.doesNotMatch(json, /</);

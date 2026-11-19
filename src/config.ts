@@ -9,9 +9,16 @@ import type { PersonRef } from './lib/structured-data.ts';
  * digits and hyphens, starting with a letter, and not "page", which the feed's own pages use.
  * A piece's page is headed "Sonnet 18" and signed with the creator, who is also the author in its
  * structured data; links and page cards say "sonnets 21–40". `plural` is written as it reads
- * mid-sentence.
+ * mid-sentence. `book` is the book the pieces come from, named in each piece's structured data;
+ * leave it out when they belong to none.
  */
-const pieces = { name: 'sonnets', label: 'Sonnet', plural: 'sonnets', creator: 'William Shakespeare' } as const;
+const pieces = {
+  name: 'sonnets',
+  label: 'Sonnet',
+  plural: 'sonnets',
+  creator: 'William Shakespeare',
+  book: { name: "Shakespeare's Sonnets", datePublished: '1609' },
+} as const;
 // Everything else is typed by SiteConfig, so optional settings such as `author` can be left out.
 export const siteConfig: SiteConfig & { pieces: typeof pieces } = {
   name: 'Astro Reels Template',
@@ -50,7 +57,7 @@ export interface SiteConfig {
   feedBase: string;
   intro: string;
   credit: { text: string; href: string };
-  pieces: { name: string; label: string; plural: string; creator: string };
+  pieces: { name: string; label: string; plural: string; creator: string; book?: { name: string; datePublished?: string } };
   indexPieces: boolean;
   /** `url` is your home page; `<url>#person` identifies you in the structured data unless you set `id`. */
   author?: PersonRef;
