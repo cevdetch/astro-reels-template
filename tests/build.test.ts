@@ -40,6 +40,7 @@ test('the 404 page is noindex, has no canonical or share image, and is not in th
   assert.match(html, /<meta name="robots" content="noindex">/);
   assert.doesNotMatch(html, /rel="canonical"|og:image/);
   assert.doesNotMatch(read('sitemap-0.xml'), /404/);
+  assert.match(html, /<a href="\/">Go to the home page<\/a><a href="\/#1">Start with Sonnet 1 ↓<\/a>/);
 });
 
 test('robots.txt allows crawling and names the sitemap index', () => {

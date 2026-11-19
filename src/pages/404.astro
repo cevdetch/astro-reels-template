@@ -1,9 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { feedHref } from '../lib/feed.ts';
+import { pieceWords } from '../lib/pieces.ts';
+import '../styles/feed.css';
+
+const words = pieceWords();
 ---
 
 <Layout title="Page not found" description="The page you requested could not be found." noindex>
-  <h1>Page not found</h1>
-  <p>The page may have moved, or the address may be incorrect.</p>
-  <a href="/">Go to the home page</a>
+  <section class="card intro" aria-labelledby="not-found">
+    <div class="poem about">
+      <h1 id="not-found">Page not found</h1>
+      <p>The page may have moved, or the address may be incorrect.</p>
+      <nav class="card-links" aria-label="Where to go">
+        <a href="/">Go to the home page</a>
+        <a href={feedHref(1)}>{`Start with ${words.piece(1)} ↓`}</a>
+      </nav>
+    </div>
+  </section>
 </Layout>
