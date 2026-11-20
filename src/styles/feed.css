@@ -34,7 +34,7 @@
   .byline { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.875rem; font-style: italic; }
   /* Sized to the screen so verse lines of 40-50 characters mostly fit whole on a phone; the
      height term keeps short, wide screens (a phone on its side) at the small end. */
-  .verse { font-size: clamp(0.875rem, min(3.85vw, 2.6dvh), 1.3rem); line-height: 1.7; }
+  .verse { font-size: var(--verse-size); line-height: 1.7; }
   .verse p { margin: 0; }
   .verse p + p { margin-block-start: 1em; }
   /* Verse typesetting: a line that wraps continues with a hanging indent, so the remainder never
@@ -60,7 +60,7 @@
   .previous { align-content: center; }
   .previous .number { font-family: var(--serif); }
   /* The closing card: a colophon after the last piece, in the verse's size and serif. */
-  .closing { margin: 0; font-size: clamp(0.875rem, min(3.85vw, 2.6dvh), 1.3rem); }
+  .closing { margin: 0; font-size: var(--verse-size); line-height: 1.7; }
   /* The contents page: every piece as its number and first line (or title), one link per row. */
   .contents { padding-block: 2rem 3rem; }
   .contents h1 { margin: 0 0 0.25rem; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }
@@ -71,6 +71,25 @@
 
   @media (prefers-reduced-motion: reduce) {
     html:has(body.feed) { scroll-snap-type: y proximity; }
+  }
+
+  /* Desktop: folio margins. The verse keeps the centred column (and the header's left edge); the
+     running head, byline and links sit in the left margin like marginalia, set toward the verse.
+     The last row is flexible so the margin notes stay together while the verse runs on. */
+  @media (min-width: 64rem) {
+    :is(.card.piece, .card.end) .poem {
+      display: grid; grid-template-columns: 10rem var(--measure) 10rem; grid-template-rows: auto auto auto 1fr;
+      column-gap: 2rem; inline-size: auto;
+    }
+    :is(.card.piece, .card.end) .poem > * { grid-column: 2; }
+    :is(.card.piece, .card.end) .poem > :is(.number, .byline, .card-links) { grid-column: 1; margin: 0; text-align: end; }
+    /* The running head shares the first verse line's line box, so the two read as one line. */
+    :is(.card.piece, .card.end) .poem > .number { line-height: calc(1.7 * var(--verse-size)); }
+    :is(.card.piece, .card.end) .poem > .byline { margin-block-start: 0.35rem; }
+    :is(.card.piece, .card.end) .poem > .card-links { flex-direction: column; align-items: flex-end; margin-block-start: 1.25rem; }
+    :is(.card.piece, .card.end) .poem > :is(.verse, .closing) { grid-row: 1 / -1; }
+    :is(.card.piece, .card.end) .poem > .title { grid-row: 1; margin-block-end: 1rem; }
+    :is(.card.piece, .card.end) .poem > .title ~ .verse { grid-row: 2 / -1; }
   }
 
   /* Short screens (small phones, landscape): a little more room so even a 15-line piece fits. */
