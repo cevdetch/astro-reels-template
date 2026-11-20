@@ -25,8 +25,8 @@ const { name, intro, credit, author, repository } = siteConfig;
     <h2 id="use-title">Make it yours</h2>
     <p>Start a project from the template:</p>
     <pre><code>pnpm create astro@latest --template <span class="nowrap">cevdetch/astro-reels-template</span></code></pre>
-    <p>Then put your site's name, address and author in <code>src/config.ts</code>, add each piece as Markdown in <code>src/content/sonnets/</code> and replace the icons in <code>public/</code>. <code>pnpm build</code> writes a static site that Cloudflare Pages, Netlify or GitHub Pages serve as it is.</p>
-    <p>With no JavaScript, the feed works with scripts turned off and loads nothing it does not show. The trade-off: the address bar does not follow the scroll, so the link to share is each piece's own page.</p>
+    <p>Then edit <code>src/config.ts</code>, swap the icons in <code>public/</code> and add your own pieces; the README walks through every setting.</p>
+    <p>It suits any collection read one piece at a time: poems, quotes, aphorisms, art captions or short prose. Each piece gets a screen in the feed, a page of its own to share and a line in the contents, and readers need nothing but a browser, not even JavaScript.</p>
     <h2 id="demo-title">Demo content</h2>
     <p>The pieces that follow are Shakespeare's 154 sonnets, first printed in 1609 and long in the public domain. {credit && <><a href={credit.href}>{credit.text}</a>.</>}</p>
     {(repository || author) && (
