@@ -96,14 +96,15 @@ skips itself once `pieces.name` is no longer `sonnets`.
      So long as men can breathe, or eyes can see,
    ```
 
-   `number` sets the order. `title` is the page title, and it is shown as the piece's heading
-   when it says more than "Sonnet 18". `creator` is optional: it names a piece's own author,
-   shown on the piece and in its structured data, in place of `pieces.creator`.
-   `description` (up to 160 characters) is the search snippet. The contents page lists each piece
-   by its title, or by its first line when the title is only "Sonnet 18". Every
-   line of the body is a line on the page. Start a line with two spaces or two em spaces to
-   indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
-   Markdown.
+   `number` sets the order: number the pieces 1, 2, 3 and on with no gaps, since the links between
+   them follow the numbers, and a gap fails the build. A piece with `draft: true` is left out, so
+   keep drafts at the end. `title` is the page title, and it is shown as the piece's heading when
+   it says more than "Sonnet 18". `creator` is optional: it names a piece's own author, shown on
+   the piece and in its structured data, in place of `pieces.creator`. `description` (up to 160
+   characters) is the search snippet. The contents page lists each piece by its title, or by its
+   first line when the title is only "Sonnet 18". Every line of the body is a line on the page.
+   Start a line with two spaces or two em spaces to indent it; a blank line starts a new stanza.
+   The body is shown as plain lines, not formatted Markdown.
 6. **Name your pieces.** `pieces` in `src/config.ts` sets everything the pieces are called. `name`
    is the content folder, the collection and the URL segment: set it to `poems`, rename
    `src/content/sonnets/` to `src/content/poems/`, and pieces live at `/poems/18/`, with the

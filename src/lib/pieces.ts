@@ -55,7 +55,7 @@ export function pieceNameProblem(name: string, feedBase: string = siteConfig.fee
 
 export interface PieceLike { data: { number: number }; body?: string | undefined }
 
-/** Pieces in number order. Fails on an empty collection, a duplicate number or an empty body. */
+/** Pieces in number order. Fails on an empty collection, a duplicate number, a gap in the numbers or an empty body. */
 export function orderPieces<T extends PieceLike>(entries: T[], { name, label }: Pick<SiteConfig['pieces'], 'name' | 'label'> = siteConfig.pieces): T[] {
   if (entries.length === 0) {
     throw new Error(`No published pieces in src/content/${name}/. Set pieces.name in src/config.ts to the name of your content folder, and check that not every piece is a draft.`);
@@ -66,5 +66,9 @@ export function orderPieces<T extends PieceLike>(entries: T[], { name, label }: 
     if (!piece.body?.trim()) throw new Error(`${label} ${n} has an empty body.`);
     if (i > 0 && sorted[i - 1]!.data.number === n) throw new Error(`${label} ${n} appears twice.`);
   });
+  const gap = sorted.findIndex((piece, i) => piece.data.number !== i + 1);
+  if (gap !== -1) {
+    throw new Error(`${label} ${gap + 1} is missing. The feed and the piece pages link pieces 1 to ${sorted.at(-1)!.data.number} by number, so number them with no gaps, and keep drafts at the end.`);
+  }
   return sorted;
 }

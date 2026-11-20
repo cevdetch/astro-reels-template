@@ -43,6 +43,13 @@ test('name errors end without a full stop, because Astro adds its own', () => {
   for (const name of ['Poems', 'page']) assert.doesNotMatch(pieceNameProblem(name) ?? 'missing', /\.$/, name);
 });
 
+test('a gap in the numbers fails, naming the missing piece', () => {
+  const poems = { name: 'poems', label: 'Poem' };
+  assert.throws(() => orderPieces([entry(1), entry(3)], poems), { message: 'Poem 2 is missing. The feed and the piece pages link pieces 1 to 3 by number, so number them with no gaps, and keep drafts at the end.' });
+  assert.throws(() => orderPieces([entry(2), entry(3)], poems), /^Error: Poem 1 is missing\./);
+  assert.equal(orderPieces([entry(2), entry(1)], poems).length, 2);
+});
+
 test('a duplicate number or an empty body fails, naming the piece', () => {
   assert.throws(() => orderPieces([entry(1), entry(1)], { name: 'poems', label: 'Poem' }), /Poem 1 appears twice/);
   assert.throws(() => orderPieces([entry(1, '  ')], { name: 'poems', label: 'Poem' }), /Poem 1 has an empty body/);
