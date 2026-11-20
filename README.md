@@ -86,7 +86,10 @@ and clone it.
      So long as men can breathe, or eyes can see,
    ```
 
-   `number` sets the order, `description` (up to 160 characters) is the search snippet, and every
+   `number` sets the order. `title` is the page title, and it is shown as the piece's heading
+   when it says more than "Sonnet 18". `creator` is optional: it names a piece's own author,
+   shown on the piece and in its structured data, in place of `pieces.creator`.
+   `description` (up to 160 characters) is the search snippet, and every
    line of the body is a line on the page. Start a line with two spaces or two em spaces to
    indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
    Markdown.

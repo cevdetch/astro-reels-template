@@ -20,6 +20,16 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
   };
 }
 
+/** A piece's own title, or nothing when it only repeats "<label> <n>", as the demo's do. */
+export function ownTitle(title: string, n: number, { label }: Pick<SiteConfig['pieces'], 'label'> = siteConfig.pieces): string | undefined {
+  return title === `${label} ${n}` ? undefined : title;
+}
+
+/** Who made a piece: its own `creator`, or the one in the config. */
+export function creatorOf(data: { creator?: string | undefined }, { creator }: Pick<SiteConfig['pieces'], 'creator'> = siteConfig.pieces): string {
+  return data.creator ?? creator;
+}
+
 /** A piece's own page: /<name>/<n>/. */
 export const piecePath = (n: number, { name }: Pick<SiteConfig['pieces'], 'name'> = siteConfig.pieces): string => `/${name}/${n}/`;
 

@@ -16,7 +16,7 @@ interface Props { piece: Piece; total: number }
 const { piece, total } = Astro.props;
 if (!Astro.site) throw new Error('Set the origin in src/config.ts.');
 const { title, description, number } = piece.data;
-const jsonLd = pieceJsonLd({ url: new URL(piecePath(number), Astro.site).href, name: title, description });
+const jsonLd = pieceJsonLd({ url: new URL(piecePath(number), Astro.site).href, name: title, description, creator: piece.data.creator });
 ---
 
 <Layout title={title} description={description} ogType="article" jsonLd={jsonLd}>

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { siteConfig } from '../src/config.ts';
-import { orderPieces, pieceNameProblem, pieceWords, piecePath } from '../src/lib/pieces.ts';
+import { creatorOf, orderPieces, ownTitle, pieceNameProblem, pieceWords, piecePath } from '../src/lib/pieces.ts';
 
 test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   const words = pieceWords();
@@ -57,4 +57,15 @@ test('name errors end without a full stop, because Astro adds its own', () => {
 test('a duplicate number or an empty body fails, naming the piece', () => {
   assert.throws(() => orderPieces([entry(1), entry(1)], { name: 'poems', label: 'Poem' }), /Poem 1 appears twice/);
   assert.throws(() => orderPieces([entry(1, '  ')], { name: 'poems', label: 'Poem' }), /Poem 1 has an empty body/);
+});
+
+test('a title shows only when it says more than the label and number', () => {
+  assert.equal(ownTitle('Sonnet 18', 18), undefined);
+  assert.equal(ownTitle('Poem 18', 18, { label: 'Poem' }), undefined);
+  assert.equal(ownTitle('The Raven', 18, { label: 'Poem' }), 'The Raven');
+});
+
+test("a piece's own creator wins over the config's", () => {
+  assert.equal(creatorOf({}), siteConfig.pieces.creator);
+  assert.equal(creatorOf({ creator: 'Ann Other' }), 'Ann Other');
 });

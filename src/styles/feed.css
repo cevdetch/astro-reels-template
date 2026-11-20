@@ -27,6 +27,10 @@
   /* A running head, as in a printed book: small, spaced capitals, so the verse stays the largest text. */
   .number { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.8125rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; }
   .number:has(+ .byline) { margin-block-end: 0.25rem; }
+  /* A piece's own title: the heading under the running head, at the welcome cards' section size. */
+  .title { margin: 0 0 1.25rem; font-size: 1.35em; font-weight: 700; }
+  .number:has(+ .title) { margin-block-end: 0.5rem; }
+  .title:has(+ .byline) { margin-block-end: 0.25rem; }
   .byline { margin: 0 0 1.25rem; color: var(--muted); font-size: 0.875rem; font-style: italic; }
   /* Sized to the screen so verse lines of 40-50 characters mostly fit whole on a phone; the
      height term keeps short, wide screens (a phone on its side) at the small end. */

@@ -9,12 +9,13 @@ export function homeJsonLd(origin: URL, { author }: Pick<SiteConfig, 'author'> =
   })));
 }
 
-/** A piece's page, by the configured creator, part of the configured book if there is one. */
-export function pieceJsonLd(input: { url: string; name: string; description: string }, { pieces }: { pieces: Pick<SiteConfig['pieces'], 'creator' | 'book'> } = siteConfig): string {
+/** A piece's page, by its own creator or the configured one, part of the configured book if there is one. */
+export function pieceJsonLd(input: { url: string; name: string; description: string; creator?: string | undefined }, { pieces }: { pieces: Pick<SiteConfig['pieces'], 'creator' | 'book'> } = siteConfig): string {
+  const { creator, ...work } = input;
   return serializeJsonLd(graph(creativeWorkNode({
-    ...input,
+    ...work,
     inLanguage: 'en',
-    author: { '@type': 'Person', name: pieces.creator },
+    author: { '@type': 'Person', name: creator ?? pieces.creator },
     partOf: pieces.book && { '@type': 'Book', ...pieces.book },
   })));
 }

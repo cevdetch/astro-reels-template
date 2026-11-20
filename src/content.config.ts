@@ -14,6 +14,8 @@ const pieces = defineCollection({
   schema: z.object({
     number: z.number().int().positive(),
     title: z.string().trim().min(1),
+    /** Who made this piece, when it is not `pieces.creator` in src/config.ts. */
+    creator: z.string().trim().min(1).optional(),
     description: z.string().trim().min(1).max(MAX_DESCRIPTION),
     draft: z.boolean().default(false),
   }).strict(),
