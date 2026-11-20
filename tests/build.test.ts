@@ -193,7 +193,7 @@ const cardLinks = (html: string) => [...html.matchAll(/<nav class="card-links" a
 
 test('feed card links say where they go, with arrows, and name the piece for screen readers', () => {
   const card3 = cardLinks(read('index.html')).find((l) => l.includes('/sonnets/3/'));
-  assert.equal(card3, '<a href="#4">Next<span class="visually-hidden">: Sonnet 4</span> ↓</a><a href="/sonnets/3/"><span class="visually-hidden">Sonnet 3’s </span>Own page →</a>');
+  assert.equal(card3, '<a href="#4">Next<span class="visually-hidden">: Sonnet 4</span> ↓</a><a href="/sonnets/3/"><span class="visually-hidden">Sonnet 3’s </span><span aria-hidden="true">Sonnet </span>page →</a>');
 });
 
 test('no two links in the feed share a name', () => {
