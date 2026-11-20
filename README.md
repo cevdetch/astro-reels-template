@@ -57,7 +57,7 @@ and clone it.
 | `pnpm check` | Astro and TypeScript checks |
 | `pnpm build` | Build the static site into `dist/` |
 | `pnpm test` | Unit tests, and checks of the last build |
-| `pnpm lint:html` | Audit `dist/` with [deadhead](https://deadhead.cevdet.ch) |
+| `pnpm lint:html` | Audit `dist/` with [deadhead](https://www.npmjs.com/package/deadhead) |
 | `pnpm verify` | All of the above, in order |
 
 ## Make it yours
