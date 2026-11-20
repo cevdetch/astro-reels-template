@@ -40,7 +40,7 @@ test('the 404 page is noindex, has no canonical or share image, and is not in th
   assert.match(html, /<meta name="robots" content="noindex">/);
   assert.doesNotMatch(html, /rel="canonical"|og:image/);
   assert.doesNotMatch(read('sitemap-0.xml'), /404/);
-  assert.match(html, /<a href="\/">Go to the home page<\/a><a href="\/#1">Start with Sonnet 1 →<\/a>/);
+  assert.match(html, /<a href="\/">Go to the home page<\/a><a href="\/sonnets\/">All sonnets →<\/a>/);
 });
 
 test('robots.txt allows crawling and names the sitemap index', () => {
@@ -213,6 +213,25 @@ test('a piece page keeps previous and next together, before the feed link', () =
   const links = cardLinks(read(`${siteConfig.pieces.name}/18/index.html`))[0] ?? '';
   const hrefs = [...links.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual(hrefs, [`/${siteConfig.pieces.name}/17/`, `/${siteConfig.pieces.name}/19/`, '/#18']);
+});
+
+test('the contents page lists every piece in order, each linking to its page', () => {
+  const name = siteConfig.pieces.name;
+  const html = read(`${name}/index.html`);
+  assert.match(html, new RegExp(`<title>Sonnets - ${esc(SITE_NAME)}</title>`));
+  assert.match(html, /<h1 id="contents-title">Sonnets<\/h1>/);
+  assert.match(html, /<meta name="robots" content="noindex, follow">/);
+  const items = [...html.matchAll(/<li><a href="([^"]+)"><span class="n">(\d+)<\/span> <span>([^<]*)<\/span><\/a><\/li>/g)];
+  assert.equal(items.length, 154);
+  assert.deepEqual(items.map((m) => Number(m[2])), Array.from({ length: 154 }, (_, i) => i + 1));
+  assert.deepEqual(items[17]!.slice(1), [`/${name}/18/`, '18', 'Shall I compare thee to a summer’s day?']);
+});
+
+test('every page header links to the contents', () => {
+  for (const path of ['index.html', 'page/2/index.html', `${siteConfig.pieces.name}/18/index.html`, '404.html']) {
+    const header = read(path).match(/<header class="site">(.*?)<\/header>/s)?.[1] ?? '';
+    assert.match(header, new RegExp(`<a href="/${siteConfig.pieces.name}/">Contents</a>`), path);
+  }
 });
 
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {

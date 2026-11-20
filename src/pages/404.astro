@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { feedHref } from '../lib/feed.ts';
 import { pieceWords } from '../lib/pieces.ts';
+import { PIECES_PATH } from '../lib/seo.ts';
 import '../styles/feed.css';
 
 const words = pieceWords();
@@ -14,7 +14,7 @@ const words = pieceWords();
       <p>The page may have moved, or the address may be incorrect.</p>
       <nav class="card-links" aria-label="Where to go">
         <a href="/">Go to the home page</a>
-        <a href={feedHref(1)}>{`Start with ${words.piece(1)} →`}</a>
+        <a href={PIECES_PATH}>{`${words.all} →`}</a>
       </nav>
     </div>
   </section>

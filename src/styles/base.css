@@ -34,7 +34,9 @@
   /* Full-width bands whose content sits in the column, so a fixed header's background can span the screen. */
   header.site, footer.site { padding-inline: max(var(--gutter), (100% - var(--measure)) / 2); }
   header.site nav { display: flex; gap: 1.25rem; padding-block: 1.25rem; }
-  header.site a { font-weight: 700; text-decoration: none; }
+  /* A quiet frame: the name in ink at regular weight, the contents link muted at the column's far edge. */
+  header.site a { text-decoration: none; }
+  header.site a + a { margin-inline-start: auto; color: var(--muted); }
   footer.site { padding-block: 2rem; color: var(--muted); font-size: 0.9rem; }
   footer.site p { margin: 0; }
   footer.site a { color: var(--muted); }

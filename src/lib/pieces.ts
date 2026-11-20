@@ -17,6 +17,10 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
     nextGroup: `Next ${plural}`,
     pageDescription: (first: number, last: number, total: number) =>
       `${Plural} ${first} to ${last} of ${creator}'s ${total}, one per screen.`,
+    /** e.g. "All poems" */
+    all: `All ${plural}`,
+    contentsHeading: Plural,
+    contentsDescription: (total: number) => `All ${total} ${plural} by ${creator}, each with its first line or title.`,
   };
 }
 

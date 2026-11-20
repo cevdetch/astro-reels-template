@@ -13,6 +13,8 @@ piece with its own page, and no JavaScript. The demo is all 154 of Shakespeare's
   change cross-fades with a CSS view transition.
 - **Deep links.** Every piece has an anchor in the feed (`/#18`, `/page/2/#25`) and a page of its
   own (`/sonnets/18/`) with links to its neighbours and back into the feed.
+- **Contents.** `/sonnets/` lists every piece with its first line or title, linked from the
+  header of every page, so readers can go straight to the one they want.
 - **Verse typesetting.** Line breaks are kept as written. A line too long for the screen wraps
   with a hanging indent, so its remainder never reads as a new line; indented lines (such as a
   sonnet's closing couplet) keep their indent.

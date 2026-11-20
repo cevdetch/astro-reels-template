@@ -1,7 +1,7 @@
 ---
 import '../styles/base.css';
 import { siteConfig } from '../config.ts';
-import { SITE_NAME, resolveSeo, type LayoutProps } from '../lib/seo.ts';
+import { PIECES_PATH, SITE_NAME, resolveSeo, type LayoutProps } from '../lib/seo.ts';
 import { isoDate } from '../lib/text.ts';
 
 type Props = LayoutProps;
@@ -48,7 +48,7 @@ const { author, repository } = siteConfig;
   </head>
   <body class={Astro.props.bodyClass}>
     <header class="site">
-      <nav aria-label="Primary"><a href="/">{SITE_NAME}</a></nav>
+      <nav aria-label="Primary"><a href="/">{SITE_NAME}</a><a href={PIECES_PATH}>Contents</a></nav>
     </header>
     <main id="main"><slot /></main>
     {(author || repository) && (

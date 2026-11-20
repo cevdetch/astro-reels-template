@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteConfig } from '../../config.ts';
+import { getPieces } from '../../lib/collection.ts';
+import { ownTitle, pieceWords, piecePath } from '../../lib/pieces.ts';
+import '../../styles/feed.css';
+
+export function getStaticPaths() {
+  return [{ params: { section: siteConfig.pieces.name } }];
+}
+
+const pieces = await getPieces();
+const words = pieceWords();
+const { creator, book } = siteConfig.pieces;
+const source = book ? `${book.name}${'datePublished' in book && book.datePublished ? ` (${book.datePublished})` : ''}` : undefined;
+---
+
+<Layout title={words.contentsHeading} description={words.contentsDescription(pieces.length)}>
+  <section class="poem contents" aria-labelledby="contents-title">
+    <h1 id="contents-title">{words.contentsHeading}</h1>
+    <p class="byline">{source ? `${creator}, ${source}` : creator}</p>
+    <ol>
+      {pieces.map((piece) => (
+        <li><a href={piecePath(piece.data.number)}><span class="n">{piece.data.number}</span> <span>{ownTitle(piece.data.title, piece.data.number) ?? piece.data.description}</span></a></li>
+      ))}
+    </ol>
+  </section>
+</Layout>
