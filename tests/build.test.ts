@@ -43,6 +43,12 @@ test('the 404 page is noindex, has no canonical or share image, and is not in th
   assert.match(html, /<a href="\/">Home page →<\/a><a href="\/sonnets\/">All sonnets →<\/a>/);
 });
 
+test('every page names Astro as its generator', () => {
+  for (const path of ['index.html', 'page/2/index.html', `${siteConfig.pieces.name}/index.html`, `${siteConfig.pieces.name}/18/index.html`, '404.html']) {
+    assert.match(read(path), /<meta name="generator" content="Astro v\d+\.\d+\.\d+">/, path);
+  }
+});
+
 test('robots.txt allows crawling and names the sitemap index', () => {
   assert.equal(read('robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap-index.xml\n`);
 });
