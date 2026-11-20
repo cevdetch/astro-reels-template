@@ -59,6 +59,8 @@
   /* The previous-page card names its own range above the link back, packed together in the middle. */
   .previous { align-content: center; }
   .previous .number { font-family: var(--serif); }
+  /* The closing card: a colophon after the last piece, in the verse's size and serif. */
+  .closing { margin: 0; font-size: clamp(0.875rem, min(3.85vw, 2.6dvh), 1.3rem); }
   /* The contents page: every piece as its number and first line (or title), one link per row. */
   .contents { padding-block: 2rem 3rem; }
   .contents h1 { margin: 0 0 0.25rem; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }

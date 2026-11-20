@@ -4,6 +4,7 @@ import PieceCard from './PieceCard.astro';
 import type { Piece } from '../lib/collection.ts';
 import { feedHref, pageCount, pageRange, PAGE_SIZE } from '../lib/feed.ts';
 import { pieceWords } from '../lib/pieces.ts';
+import { PIECES_PATH } from '../lib/seo.ts';
 import '../styles/feed.css';
 
 interface Props { page: number; pieces: Piece[] }
@@ -29,6 +30,15 @@ const words = pieceWords();
   {after && (
     <section class="card next" aria-label={words.nextGroup}>
       <a href={feedHref(after.first)} rel="next">{`Next: ${words.range(after.first, after.last)} →`}</a>
+    </section>
+  )}
+  {!after && (
+    <section class="card end" aria-labelledby="the-end">
+      <div class="poem">
+        <h2 class="number" id="the-end">The end</h2>
+        <p class="closing">{words.closing(total)}</p>
+        <nav class="card-links" aria-label="After the last"><a href={PIECES_PATH}>Contents →</a><a href={feedHref(1)}>Start again ↑</a></nav>
+      </div>
     </section>
   )}
 </div>

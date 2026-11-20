@@ -13,6 +13,7 @@ test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   assert.equal(words.nextGroup, 'Next sonnets');
   assert.equal(words.pageDescription(21, 40, 154), "Sonnets 21 to 40 of William Shakespeare's 154, one per screen.");
   assert.equal(words.all, 'All sonnets');
+  assert.equal(words.closing(154), 'All 154 sonnets, by William Shakespeare.');
   assert.equal(words.contentsHeading, 'Sonnets');
   assert.equal(words.contentsDescription(154), "All 154 sonnets by William Shakespeare, each with its first line or title.");
 });

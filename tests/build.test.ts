@@ -234,6 +234,14 @@ test('every page header links to the contents', () => {
   }
 });
 
+test('the last page ends with a closing card: the whole collection, the contents and the start', () => {
+  const end = read('page/8/index.html').match(/<section class="card end"[^>]*>(.*?)<\/section>/s)?.[1] ?? '';
+  assert.match(end, /<h2 class="number" id="the-end">The end<\/h2>/);
+  assert.match(end, /<p class="closing">All 154 sonnets, by William Shakespeare\.<\/p>/);
+  assert.match(end, new RegExp(`<a href="/${siteConfig.pieces.name}/">Contents →</a><a href="/#1">Start again ↑</a>`));
+  assert.doesNotMatch(read('index.html'), /class="card end"/);
+});
+
 test('a sonnet page is a CreativeWork by William Shakespeare, part of the 1609 Sonnets', () => {
   assert.deepEqual(jsonLd('sonnets/18/index.html'), [{
     '@type': 'CreativeWork', '@id': `${origin}/sonnets/18/#work`, url: `${origin}/sonnets/18/`, name: 'Sonnet 18',

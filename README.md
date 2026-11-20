@@ -10,7 +10,8 @@ piece with its own page, and no JavaScript. The demo is all 154 of Shakespeare's
 - **One piece per screen.** CSS scroll-snap holds each piece in place; the mouse wheel, touch and
   the keyboard (↓, Page Down, Space) move one card at a time.
 - **Pages of 20.** `/`, `/page/2/`, … each end with a card that opens the next page, and the page
-  change cross-fades with a CSS view transition.
+  change cross-fades with a CSS view transition. The last page ends with a closing card that
+  leads to the contents and back to the start.
 - **Deep links.** Every piece has an anchor in the feed (`/#18`, `/page/2/#25`) and a page of its
   own (`/sonnets/18/`) with links to its neighbours and back into the feed.
 - **Contents.** `/sonnets/` lists every piece with its first line or title, linked from the

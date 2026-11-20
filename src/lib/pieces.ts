@@ -20,6 +20,8 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
     /** e.g. "All poems" */
     all: `All ${plural}`,
     contentsHeading: Plural,
+    /** The closing card's line, e.g. "All 40 poems, by A. Poet." */
+    closing: (total: number) => `All ${total} ${plural}, by ${creator}.`,
     contentsDescription: (total: number) => `All ${total} ${plural} by ${creator}, each with its first line or title.`,
   };
 }
