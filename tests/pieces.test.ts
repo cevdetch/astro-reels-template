@@ -3,20 +3,6 @@ import assert from 'node:assert/strict';
 import { siteConfig } from '../src/config.ts';
 import { creatorOf, orderPieces, ownTitle, pieceNameProblem, pieceWords, piecePath, sharedCreator } from '../src/lib/pieces.ts';
 
-test('the demo words: Sonnet, sonnets, Shakespeare', () => {
-  const words = pieceWords();
-  assert.equal(words.piece(18), 'Sonnet 18');
-  assert.equal(words.range(21, 40), 'sonnets 21–40');
-  assert.equal(words.more, 'More sonnets');
-  assert.equal(words.previousGroup, 'Previous sonnets');
-  assert.equal(words.nextGroup, 'Next sonnets');
-  assert.equal(words.pageDescription(21, 40, 154), "Sonnets 21 to 40 of William Shakespeare's 154, one per screen.");
-  assert.equal(words.all, 'All sonnets');
-  assert.equal(words.closing(154, 'William Shakespeare'), 'All 154 sonnets, by William Shakespeare.');
-  assert.equal(words.contentsHeading, 'Sonnets');
-  assert.equal(words.contentsDescription(154), "All 154 sonnets by William Shakespeare, each with its first line or title.");
-});
-
 test("a fork's words reach every string", () => {
   const words = pieceWords({ label: 'Poem', plural: 'poems', creator: 'A. Poet' });
   const all = [words.piece(3), words.range(1, 20), words.more, words.previousGroup, words.nextGroup, words.pageDescription(1, 20, 40)];
@@ -63,7 +49,7 @@ test('a duplicate number or an empty body fails, naming the piece', () => {
 });
 
 test('a title shows only when it says more than the label and number', () => {
-  assert.equal(ownTitle('Sonnet 18', 18), undefined);
+  assert.equal(ownTitle('Sonnet 18', 18, { label: 'Sonnet' }), undefined);
   assert.equal(ownTitle('Poem 18', 18, { label: 'Poem' }), undefined);
   assert.equal(ownTitle('The Raven', 18, { label: 'Poem' }), 'The Raven');
 });

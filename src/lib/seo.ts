@@ -1,4 +1,4 @@
-import { siteConfig } from '../config.ts';
+import { siteConfig, type SiteConfig } from '../config.ts';
 
 export const SITE_NAME = siteConfig.name;
 export const TAGLINE = siteConfig.tagline;
@@ -14,10 +14,13 @@ export const PIECES_PATH = `/${siteConfig.pieces.name}/`;
  * unless `indexPieces` in src/config.ts is false, which also keeps out the piece pages and the feed
  * pages after the first. The robots meta tag and the sitemap both follow it.
  */
-export function inSearch(pathname: string): boolean {
+export function inSearch(
+  pathname: string,
+  { indexPieces, feedBase, pieces }: Pick<SiteConfig, 'indexPieces' | 'feedBase'> & { pieces: Pick<SiteConfig['pieces'], 'name'> } = siteConfig,
+): boolean {
   if (/\/404(?:\.html|\/)?$/.test(pathname)) return false;
-  if (siteConfig.indexPieces) return true;
-  return !pathname.startsWith(PIECES_PATH) && !pathname.startsWith(`${siteConfig.feedBase}page/`);
+  if (indexPieces) return true;
+  return !pathname.startsWith(`/${pieces.name}/`) && !pathname.startsWith(`${feedBase}page/`);
 }
 
 export type Direction = 'ltr' | 'rtl' | 'auto';

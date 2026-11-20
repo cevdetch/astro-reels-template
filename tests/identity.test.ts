@@ -28,15 +28,6 @@ test('with no author, the WebSite names no publisher', () => {
   assert.equal('publisher' in site, false);
 });
 
-test('a sonnet is a CreativeWork by Shakespeare, part of the 1609 book', () => {
-  const url = 'https://example.test/sonnets/18/';
-  assert.deepEqual(nodes(pieceJsonLd({ url, name: 'Sonnet 18', description: 'Shall I compare thee to a summer’s day?' })), [{
-    '@type': 'CreativeWork', '@id': `${url}#work`, url, name: 'Sonnet 18', description: 'Shall I compare thee to a summer’s day?',
-    inLanguage: 'en', author: { '@type': 'Person', name: 'William Shakespeare' },
-    isPartOf: { '@type': 'Book', name: "Shakespeare's Sonnets", datePublished: '1609' },
-  }]);
-});
-
 test('a piece credits the creator named in the config', () => {
   const [work] = nodes(pieceJsonLd({ url: 'https://example.test/sonnets/1/', name: 'Sonnet 1', description: 'x' }, { pieces: { creator: 'A. Poet' } }));
   assert.deepEqual(work?.['author'], { '@type': 'Person', name: 'A. Poet' });

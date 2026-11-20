@@ -9,8 +9,8 @@ const ctx = (pathname: string, extra: Partial<SeoContext> = {}): SeoContext =>
 
 test('the home page title is the site name, a colon and the tagline', async () => {
   const seo = await resolveSeo({ description: 'A description.' }, ctx('/'));
-  assert.equal(SITE_NAME, 'Astro Reels Template');
-  assert.equal(HOME_TITLE, 'Astro Reels Template: a vertical feed with zero JavaScript');
+  assert.equal(SITE_NAME, siteConfig.name);
+  assert.equal(HOME_TITLE, `${siteConfig.name}: ${siteConfig.tagline}`);
   assert.equal(seo.title, HOME_TITLE);
   assert.equal(seo.ogTitle, SITE_NAME);
   assert.equal(seo.canonicalUrl, 'https://example.test/');
@@ -18,7 +18,7 @@ test('the home page title is the site name, a colon and the tagline', async () =
 
 test('other pages lead with their title, end in " - <site name>" and get a self canonical', async () => {
   const seo = await resolveSeo({ title: 'About', description: 'About this site.' }, ctx('/about/'));
-  assert.equal(seo.title, 'About - Astro Reels Template');
+  assert.equal(seo.title, `About - ${SITE_NAME}`);
   assert.equal(seo.robots, undefined);
   assert.equal(seo.ogTitle, 'About');
   assert.equal(seo.canonicalUrl, 'https://example.test/about/');
@@ -31,13 +31,23 @@ test('noindex pages have no canonical', async () => {
   assert.equal(seo.canonicalUrl, undefined);
 });
 
+const demoLike = { indexPieces: false, feedBase: '/', pieces: { name: 'poems' } };
+
 test('with indexPieces false, only the first feed page and other pages are in search', () => {
-  for (const path of ['/', '/about/']) assert.equal(inSearch(path), true, path);
-  const pieces = `/${siteConfig.pieces.name}`;
-  for (const path of ['/page/2/', '/page/8/', `${pieces}/1/`, `${pieces}/154/`, '/404/', '/404.html']) assert.equal(inSearch(path), false, path);
+  for (const path of ['/', '/about/']) assert.equal(inSearch(path, demoLike), true, path);
+  for (const path of ['/page/2/', '/page/8/', '/poems/', '/poems/1/', '/poems/154/', '/404/', '/404.html']) assert.equal(inSearch(path, demoLike), false, path);
+  const reels = { ...demoLike, feedBase: '/reels/' };
+  assert.equal(inSearch('/reels/', reels), true);
+  assert.equal(inSearch('/reels/page/2/', reels), false);
 });
 
-test('piece pages and later feed pages are noindex, follow but keep their canonical and share image', async () => {
+test('with indexPieces true, every page but the 404 is in search', () => {
+  const own = { ...demoLike, indexPieces: true };
+  for (const path of ['/', '/page/2/', '/poems/', '/poems/18/']) assert.equal(inSearch(path, own), true, path);
+  for (const path of ['/404/', '/404.html']) assert.equal(inSearch(path, own), false, path);
+});
+
+test('piece pages and later feed pages are noindex, follow but keep their canonical and share image', { skip: siteConfig.indexPieces && 'indexPieces is true, so every page is in search' }, async () => {
   for (const path of [`/${siteConfig.pieces.name}/18/`, '/page/2/']) {
     const seo = await resolveSeo({ title: 'A piece', description: 'x' }, ctx(path, { mode: 'build', socialImages: true }));
     assert.equal(seo.robots, 'noindex, follow', path);

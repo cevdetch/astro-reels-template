@@ -60,6 +60,10 @@ and clone it.
 | `pnpm lint:html` | Audit `dist/` with [deadhead](https://www.npmjs.com/package/deadhead) |
 | `pnpm verify` | All of the above, in order |
 
+The tests in `tests/` hold for any site built from the template: they take their expectations
+from `src/config.ts` and your content folder. `tests/demo/` checks the demo word for word and
+skips itself once `pieces.name` is no longer `sonnets`.
+
 ## Make it yours
 
 1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`, the
@@ -109,6 +113,10 @@ and clone it.
    folder and URL segment, or a folder with no pieces, fails the build. `book` names the book the
    pieces come from in their structured data; leave it out when they belong to none.
 7. **Page size.** `PAGE_SIZE` in `src/lib/feed.ts`.
+8. **Remove the demo.** Once your pieces are in, delete what only the demo uses: the sonnets in
+   `src/content/sonnets/` (gone already if you renamed the folder), `scripts/` (the sonnets'
+   import from Project Gutenberg), `tests/demo/` and `docs/screenshot.png`. Then rewrite this
+   README for your site, and keep `LICENSE` as the License section says.
 
 ## Deploy
 
