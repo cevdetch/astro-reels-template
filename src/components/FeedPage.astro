@@ -5,7 +5,6 @@ import type { Piece } from '../lib/collection.ts';
 import { feedHref, pageCount, pageRange, PAGE_SIZE } from '../lib/feed.ts';
 import { pieceWords, sharedCreator } from '../lib/pieces.ts';
 import { PIECES_PATH } from '../lib/seo.ts';
-import '../styles/feed.css';
 
 interface Props { page: number; pieces: Piece[] }
 const { page, pieces } = Astro.props;

@@ -10,7 +10,7 @@ import { PAGE_SIZE, feedHref, pageCount } from '../src/lib/feed.ts';
 import { creatorOf, ownTitle, pieceWords, piecePath, sharedCreator } from '../src/lib/pieces.ts';
 import { HOME_TITLE, PIECES_PATH, SITE_NAME, inSearch } from '../src/lib/seo.ts';
 import { firstLine } from '../src/lib/verse.ts';
-import { attr, built, cardLinks, dist, esc, html, htmlPages, jsonLd, origin, read, servedAt, sourcePieces, text } from './support.ts';
+import { attr, built, capoWeight, cardLinks, dist, esc, headTags, html, htmlPages, jsonLd, origin, read, servedAt, sourcePieces, text } from './support.ts';
 
 const pieces = sourcePieces();
 const total = pieces.length;
@@ -55,6 +55,15 @@ test('the 404 page is noindex, has no canonical or share image, and leads home a
 
 test('every page names Astro as its generator', () => {
   for (const path of htmlPages()) assert.match(read(path), /<meta name="generator" content="Astro v\d+\.\d+\.\d+">/, path);
+});
+
+test("every page's <head> is in capo.js order: charset and viewport, the title, the stylesheet, the rest", () => {
+  for (const path of htmlPages()) {
+    const tags = headTags(read(path));
+    const weights = tags.map(capoWeight);
+    assert.deepEqual(weights, [...weights].sort((a, b) => b - a), `${path}: ${tags.join(' ')}`);
+    assert.deepEqual(weights.slice(0, 4), [10, 10, 9, 4], path);
+  }
 });
 
 test('robots.txt allows crawling and names the sitemap index', () => {

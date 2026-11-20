@@ -48,6 +48,39 @@ export const htmlPages = (dir: URL = dist, prefix = ''): string[] => readdirSync
 /** The URL path a built page is served at: page/2/index.html is /page/2/. */
 export const servedAt = (path: string) => `/${path.replace(/(^|\/)index\.html$/, '$1')}`;
 
+/** The opening tag of every element in a page's <head>, in order. */
+export const headTags = (markup: string): string[] =>
+  [...(markup.match(/<head\b[^>]*>(.*?)<\/head>/s)?.[1] ?? '').matchAll(/<(meta|link|title|base|script|style|noscript|template)\b[^>]*>/g)].map((m) => m[0]);
+
+const HTTP_EQUIV = ['accept-ch', 'content-security-policy', 'content-type', 'default-style', 'delegate-ch', 'origin-trial', 'x-dns-prefetch-control'];
+
+/**
+ * Where capo.js ranks a <head> element, from 10 (pragmas such as charset and viewport) down to 0
+ * (everything else), following its rules in src/lib/rules.js (capo.js 2.3.1). Styles are ranked
+ * by their tag alone; a <style> with @import (6) never appears here.
+ */
+export function capoWeight(tag: string): number {
+  const name = tag.match(/^<(\w+)/)![1];
+  const attr = (a: string) => tag.match(new RegExp(`\\s${a}(?:="([^"]*)")?[\\s>/]`))?.[1]?.toLowerCase() ?? (new RegExp(`\\s${a}[\\s>=/]`).test(tag) ? '' : undefined);
+  const rel = attr('rel');
+  if (name === 'base' || (name === 'meta' && (attr('charset') !== undefined || attr('name') === 'viewport' || HTTP_EQUIV.includes(attr('http-equiv') ?? '')))) return 10;
+  if (name === 'title') return 9;
+  if (name === 'link' && (rel === 'preconnect' || ((rel === 'preload' || rel === 'modulepreload') && attr('fetchpriority') === 'high'))) return 8;
+  if (name === 'script') {
+    const src = attr('src') !== undefined;
+    if (src && attr('async') !== undefined) return 7;
+    if (src && attr('defer') !== undefined) return 2;
+    if (src && attr('type') === 'module') return 2;
+    if (attr('type')?.trim() === 'speculationrules') return 1;
+    if (attr('type')?.includes('json')) return 0;
+    return 5;
+  }
+  if ((name === 'style' && attr('media') !== 'print') || (name === 'link' && rel === 'stylesheet')) return 4;
+  if (name === 'link' && (rel === 'preload' || rel === 'modulepreload')) return 3;
+  if (name === 'link' && ['prefetch', 'dns-prefetch', 'prerender'].includes(rel ?? '')) return 1;
+  return 0;
+}
+
 export interface SourcePiece { number: number; title: string; description: string; creator?: string; body: string }
 
 /** One front-matter value: double-quoted (JSON escapes), single-quoted ('' for ') or plain. */

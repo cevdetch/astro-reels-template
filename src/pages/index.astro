@@ -4,7 +4,6 @@ import Layout from '../layouts/Layout.astro';
 import { siteConfig } from '../config.ts';
 import { getPieces } from '../lib/collection.ts';
 import { homeJsonLd } from '../lib/identity.ts';
-import '../styles/feed.css';
 
 if (!Astro.site) throw new Error('Set the origin in src/config.ts.');
 const pieces = await getPieces();

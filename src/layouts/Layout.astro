@@ -1,5 +1,7 @@
 ---
-import '../styles/base.css';
+// Linked by URL rather than imported: Astro injects imported styles at the end of <head>, and
+// capo.js order puts the stylesheet straight after the title.
+import stylesheet from '../styles/site.css?url';
 import { siteConfig } from '../config.ts';
 import { PIECES_PATH, SITE_NAME, resolveSeo, type LayoutProps } from '../lib/seo.ts';
 import { isoDate } from '../lib/text.ts';
@@ -22,6 +24,7 @@ const { author, repository } = siteConfig;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{seo.title}</title>
+    <link rel="stylesheet" href={stylesheet} />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="dark light" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />

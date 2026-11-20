@@ -4,7 +4,6 @@ import { siteConfig } from '../../config.ts';
 import { getPieces } from '../../lib/collection.ts';
 import { ownTitle, pieceWords, piecePath, sharedCreator } from '../../lib/pieces.ts';
 import { firstLine } from '../../lib/verse.ts';
-import '../../styles/feed.css';
 
 export function getStaticPaths() {
   return [{ params: { section: siteConfig.pieces.name } }];

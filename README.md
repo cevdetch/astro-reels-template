@@ -143,6 +143,9 @@ What the template does for search:
   search.
 - The 404 page is served as `404.html`, `noindex` and without a canonical.
 - Every page reads in full without JavaScript, and `pnpm lint:html` audits the built HTML.
+- Every `<head>` is in [capo.js](https://rviscomi.github.io/capo.js/) order: charset and
+  viewport, the title, the stylesheet, then everything else, which a test checks. The layout links
+  `src/styles/site.css` itself, so add styles there or in the files it imports.
 
 The index option, `indexPieces` in `src/config.ts`:
 

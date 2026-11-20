@@ -4,7 +4,6 @@ import Layout from '../../layouts/Layout.astro';
 import { getPieces, type Piece } from '../../lib/collection.ts';
 import { pageCount, pageRange } from '../../lib/feed.ts';
 import { pieceWords } from '../../lib/pieces.ts';
-import '../../styles/feed.css';
 
 export async function getStaticPaths() {
   const pieces = await getPieces();
