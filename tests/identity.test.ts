@@ -1,6 +1,5 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { siteConfig } from '../src/config.ts';
 import { homeJsonLd, pieceJsonLd } from '../src/lib/identity.ts';
 import { SITE_NAME } from '../src/lib/seo.ts';
 
@@ -11,11 +10,10 @@ const nodes = (json: string): Record<string, unknown>[] => {
 };
 
 test('the home page is one WebSite published by the configured author', () => {
-  const { author } = siteConfig;
-  assert.ok(author);
-  assert.deepEqual(nodes(homeJsonLd(new URL('https://example.test'))), [{
+  const author = { name: 'A. Writer', url: 'https://example.com/' };
+  assert.deepEqual(nodes(homeJsonLd(new URL('https://example.test'), { author })), [{
     '@type': 'WebSite', '@id': 'https://example.test/#website', url: 'https://example.test/', name: SITE_NAME, inLanguage: 'en',
-    publisher: { '@type': 'Person', '@id': new URL('#person', author.url).href, name: author.name, url: author.url },
+    publisher: { '@type': 'Person', '@id': 'https://example.com/#person', name: 'A. Writer', url: 'https://example.com/' },
   }]);
 });
 

@@ -23,15 +23,15 @@ const { name, intro, credit, author, repository } = siteConfig;
 <section class="card intro" aria-labelledby="use-title">
   <div class="poem about">
     <h2 id="use-title">Make it yours</h2>
-    <p>Start a project from the template:</p>
+    <p>Start a new project from the template:</p>
     <pre><code>pnpm create astro@latest --template <span class="nowrap">cevdetch/astro-reels-template</span></code></pre>
-    <p>Then edit <code>src/config.ts</code>, swap the icons in <code>public/</code> and add your own pieces; the README walks through every setting.</p>
+    <p>Then edit <code>src/config.ts</code>, swap the icons in <code>public/</code> and add your own pieces; the README walks you through every setting.</p>
     <p>It suits any collection read one piece at a time: poems, quotes, aphorisms, art captions or short prose. Each piece gets a screen in the feed, a page of its own to share and a line in the contents, and readers need nothing but a browser, not even JavaScript.</p>
     <h2 id="demo-title">Demo content</h2>
     <p>The pieces that follow are Shakespeare's 154 sonnets, first printed in 1609 and long in the public domain. {credit && <><a href={credit.href}>{credit.text}</a>.</>}</p>
     {(repository || author) && (
       <nav class="card-links" aria-label="About this template">
-        {repository && <a href={repository}>Source code and documentation</a>}
+        {repository && <a href={repository}>The source code and documentation</a>}
         {author && <a href={author.url}>Made by {author.name}</a>}
       </nav>
     )}

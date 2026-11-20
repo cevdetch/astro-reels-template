@@ -90,21 +90,20 @@ const jsonLd = (path: string): Record<string, unknown>[] => {
   return ld['@graph'];
 };
 
-test('the home page declares the WebSite, published by the configured author', () => {
+test('the home page declares the WebSite, published by the configured author if there is one', () => {
   const { author } = siteConfig;
-  assert.ok(author);
   assert.deepEqual(jsonLd('index.html'), [{
     '@type': 'WebSite', '@id': `${origin}/#website`, url: `${origin}/`, name: SITE_NAME, inLanguage: 'en',
-    publisher: { '@type': 'Person', '@id': 'https://cevdet.ch/#person', name: author.name, url: 'https://cevdet.ch/' },
+    ...(author ? { publisher: { '@type': 'Person', '@id': author.id ?? new URL('#person', author.url).href, name: author.name, url: author.url } } : {}),
   }]);
 });
 
 test('every page ends with the author and source credit from the config', () => {
   const { author, repository } = siteConfig;
-  assert.ok(author && repository);
+  const credits = [author && `By <a href="${author.url}">${author.name}</a>`, repository && `<a href="${repository}">Source code</a>`].filter(Boolean);
   for (const path of ['index.html', 'page/8/index.html', `${siteConfig.pieces.name}/18/index.html`, '404.html']) {
     const footer = read(path).match(/<footer class="site">(.*?)<\/footer>/s)?.[1];
-    assert.equal(footer, `<p>By <a href="${author.url}">${author.name}</a> · <a href="${repository}">Source code</a></p>`, path);
+    assert.equal(footer, credits.length ? `<p>${credits.join(' · ')}</p>` : undefined, path);
   }
 });
 
@@ -294,5 +293,5 @@ test('the home page explains the template in its own words, before the first son
   assert.match(own, /<code>pnpm create astro@latest --template <span class="nowrap">cevdetch\/astro-reels-template<\/span><\/code>/);
   assert.match(own, /Shakespeare&#39;s 154 sonnets|Shakespeare's 154 sonnets/);
   assert.match(own, new RegExp(`<a href="${esc(siteConfig.repository!)}">`));
-  assert.match(own, new RegExp(`<a href="${esc(siteConfig.author!.url)}">Made by ${esc(siteConfig.author!.name)}</a>`));
+  assert.doesNotMatch(own, /Made by/);
 });

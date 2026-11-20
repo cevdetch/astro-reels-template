@@ -40,11 +40,9 @@ export const siteConfig: SiteConfig & { pieces: typeof pieces } = {
    * Set it true when the pieces are your own.
    */
   indexPieces: false,
-  /**
-   * Who publishes the site: credited in every page's footer and named as the publisher in the home
-   * page's structured data. Leave it out to show neither.
-   */
-  author: { name: 'Cevdet Haran', url: 'https://cevdet.ch/' },
+  // Who publishes the site: credited in every page's footer and named as the publisher in the home
+  // page's structured data. The demo leaves it out, and shows neither.
+  // author: { name: 'Your Name', url: 'https://example.com/' },
   /** The source code, linked from the footer. Leave it out to drop the link. */
   repository: 'https://github.com/cevdetch/astro-reels-template',
   socialImages: true,
