@@ -14,8 +14,10 @@ const { label } = siteConfig.pieces;
 const words = pieceWords();
 // A title of its own becomes the heading under the running head; a bare "Poem 18" stays one.
 const title = ownTitle(piece.data.title, n);
-// The byline: always on a piece's page, and in the feed when the piece names its own creator.
-const byline = context === 'page' || piece.data.creator ? creatorOf(piece.data) : undefined;
+// The byline: always on a piece's page; in the feed, on phones only when the piece names its own
+// creator, and always in the desktop margin.
+const byline = creatorOf(piece.data);
+const bylineClass = context === 'page' || piece.data.creator ? 'byline' : 'byline margin-only';
 const head = context === 'feed' ? `${n} of ${total}` : words.piece(n);
 // The next piece: on this page by its anchor, on the next page by its place there.
 const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n + 1)) : undefined;
@@ -31,7 +33,7 @@ const next = n < total ? (pageOf(n + 1) === pageOf(n) ? `#${n + 1}` : feedHref(n
     ) : (
       <Heading class="number" id={`piece-${n}`}>{context === 'feed' && <span class="visually-hidden">{label} </span>}{head}</Heading>
     )}
-    {byline && <p class="byline">{byline}</p>}
+    <p class={bylineClass}>{byline}</p>
     <div class="verse">
       {verse.map((stanza) => (
         <p>{stanza.map((line) => <span class:list={['line', { indent: line.indent }]}>{line.text}</span>)}</p>

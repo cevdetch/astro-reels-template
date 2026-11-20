@@ -56,10 +56,10 @@
   .nowrap { white-space: nowrap; }
   .about code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.85em; }
   .hint { color: var(--muted); font-family: system-ui, sans-serif; font-size: 0.9rem; }
-  .next a, .previous a { font-size: 1.25rem; }
-  /* The previous-page card names its own range above the link back, packed together in the middle. */
-  .previous { align-content: center; }
-  .previous .number { font-family: var(--serif); }
+  /* Page turns: a muted link in the column, quieter than the verse; the previous card names its range. */
+  .turn { margin: 0; font-family: system-ui, sans-serif; font-size: 1.05rem; }
+  .turn a { display: inline-block; padding-block: 0.6rem; color: var(--muted); }
+  .margin-only { display: none; }
   /* The closing card: a colophon after the last piece, in the verse's size and serif. */
   .closing { margin: 0; font-size: var(--verse-size); line-height: 1.7; }
   /* The contents page: every piece as its number and first line (or title), one link per row. */
@@ -78,17 +78,18 @@
      running head, byline and links sit in the left margin like marginalia, set toward the verse.
      The last row is flexible so the margin notes stay together while the verse runs on. */
   @media (min-width: 64rem) {
-    :is(.card.piece, .card.end) .poem {
+    :is(.card.piece, .card.end, .card.previous, .card.next) .poem {
       display: grid; grid-template-columns: 10rem var(--measure) 10rem; grid-template-rows: auto auto auto 1fr;
       column-gap: 2rem; inline-size: auto;
     }
-    :is(.card.piece, .card.end) .poem > * { grid-column: 2; }
-    :is(.card.piece, .card.end) .poem > :is(.number, .byline, .card-links) { grid-column: 1; margin: 0; text-align: end; }
+    :is(.card.piece, .card.end, .card.previous, .card.next) .poem > * { grid-column: 2; }
+    :is(.card.piece, .card.end, .card.previous, .card.next) .poem > :is(.number, .byline, .card-links) { grid-column: 1; margin: 0; text-align: end; }
     /* The running head shares the first verse line's line box, so the two read as one line. */
-    :is(.card.piece, .card.end) .poem > .number { line-height: calc(1.7 * var(--verse-size)); }
+    :is(.card.piece, .card.end, .card.previous, .card.next) .poem > .number { line-height: calc(1.7 * var(--verse-size)); }
     :is(.card.piece, .card.end) .poem > .byline { margin-block-start: 0.35rem; }
     :is(.card.piece, .card.end) .poem > .card-links { flex-direction: column; align-items: flex-end; margin-block-start: 1.25rem; }
-    :is(.card.piece, .card.end) .poem > :is(.verse, .closing) { grid-row: 1 / -1; }
+    :is(.card.piece, .card.end, .card.previous, .card.next) .poem > :is(.verse, .closing, .turn) { grid-row: 1 / -1; }
+    .poem > .margin-only { display: block; }
     :is(.card.piece, .card.end) .poem > .title { grid-row: 1; margin-block-end: 1rem; }
     :is(.card.piece, .card.end) .poem > .title ~ .verse { grid-row: 2 / -1; }
   }

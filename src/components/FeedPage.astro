@@ -22,14 +22,13 @@ const words = pieceWords();
   {page === 1 && <Intro />}
   {page > 1 && before && (
     <section class="card previous" aria-label={words.previousGroup}>
-      <h1 class="number">{words.range(first, last)}</h1>
-      <a href={feedHref(before.last)} rel="prev">{`← Previous: ${words.range(before.first, before.last)}`}</a>
+      <div class="poem"><h1 class="number">{words.range(first, last)}</h1><p class="turn"><a href={feedHref(before.last)} rel="prev">{`← Previous: ${words.range(before.first, before.last)}`}</a></p></div>
     </section>
   )}
   {shown.map((piece) => <PieceCard piece={piece} total={total} context="feed" />)}
   {after && (
     <section class="card next" aria-label={words.nextGroup}>
-      <a href={feedHref(after.first)} rel="next">{`Next: ${words.range(after.first, after.last)} →`}</a>
+      <div class="poem"><p class="turn"><a href={feedHref(after.first)} rel="next">{`Next: ${words.range(after.first, after.last)} →`}</a></p></div>
     </section>
   )}
   {!after && (

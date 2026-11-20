@@ -164,7 +164,8 @@ test('a feed card names the piece and shows its place in the collection', () => 
   const h2 = html.match(/<h2 class="number" id="piece-18">(.*?)<\/h2>/s)?.[1] ?? '';
   assert.equal(text(h2), `${siteConfig.pieces.label} 18 of 154`);
   assert.match(h2, new RegExp(`<span class="visually-hidden">${esc(siteConfig.pieces.label)} </span>18`));
-  assert.doesNotMatch(html, /class="byline"/);
+  // The byline is in the feed too, but only for the desktop margin.
+  assert.match(h2 + html.slice(html.indexOf('id="piece-18"'), html.indexOf('id="piece-19"')), /<p class="byline margin-only">William Shakespeare<\/p>/);
 });
 
 test('turning forward lands on the first piece of the next page, not on its previous-page card', () => {
@@ -235,6 +236,12 @@ test('the header marks the contents link as the current page on the contents pag
 
 test('the scaffold command keeps the repository name in one piece', () => {
   assert.match(read('index.html'), /<span class="nowrap">cevdetch\/astro-reels-template<\/span>/);
+});
+
+test('page-turn cards sit in the column like every other card', () => {
+  const page2 = read('page/2/index.html');
+  assert.match(page2, /<section class="card previous"[^>]*><div class="poem"><h1 class="number">sonnets 21–40<\/h1><p class="turn"><a href="\/#20" rel="prev">/);
+  assert.match(page2, /<section class="card next"[^>]*><div class="poem"><p class="turn"><a href="\/page\/3\/#41" rel="next">/);
 });
 
 test('every page header links to the contents', () => {
