@@ -39,6 +39,7 @@
   /* A quiet frame: the name in ink at regular weight, the contents link muted at the column's far edge. */
   header.site a { text-decoration: none; }
   header.site a + a { margin-inline-start: auto; color: var(--muted); }
+  header.site a[aria-current='page'] { color: var(--text); }
   footer.site { padding-block: 2rem; color: var(--muted); font-size: 0.9rem; }
   footer.site p { margin: 0; }
   footer.site a { color: var(--muted); }

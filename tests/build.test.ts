@@ -40,7 +40,7 @@ test('the 404 page is noindex, has no canonical or share image, and is not in th
   assert.match(html, /<meta name="robots" content="noindex">/);
   assert.doesNotMatch(html, /rel="canonical"|og:image/);
   assert.doesNotMatch(read('sitemap-0.xml'), /404/);
-  assert.match(html, /<a href="\/">Go to the home page<\/a><a href="\/sonnets\/">All sonnets →<\/a>/);
+  assert.match(html, /<a href="\/">Home page →<\/a><a href="\/sonnets\/">All sonnets →<\/a>/);
 });
 
 test('robots.txt allows crawling and names the sitemap index', () => {
@@ -193,7 +193,7 @@ const cardLinks = (html: string) => [...html.matchAll(/<nav class="card-links" a
 
 test('feed card links say where they go, with arrows, and name the piece for screen readers', () => {
   const card3 = cardLinks(read('index.html')).find((l) => l.includes('/sonnets/3/'));
-  assert.equal(card3, '<a href="#4">Next<span class="visually-hidden">: Sonnet 4</span> ↓</a><a href="/sonnets/3/"><span class="visually-hidden">Sonnet 3’s </span><span aria-hidden="true">Sonnet </span>page →</a>');
+  assert.equal(card3, '<a href="#4">Next<span class="visually-hidden">: Sonnet 4</span> ↓</a><a href="/sonnets/3/">Sonnet page<span class="visually-hidden">: Sonnet 3</span> →</a>');
 });
 
 test('no two links in the feed share a name', () => {
@@ -225,6 +225,16 @@ test('the contents page lists every piece in order, each linking to its page', (
   assert.equal(items.length, 154);
   assert.deepEqual(items.map((m) => Number(m[2])), Array.from({ length: 154 }, (_, i) => i + 1));
   assert.deepEqual(items[17]!.slice(1), [`/${name}/18/`, '18', 'Shall I compare thee to a summer’s day?']);
+});
+
+test('the header marks the contents link as the current page on the contents page only', () => {
+  const name = siteConfig.pieces.name;
+  assert.match(read(`${name}/index.html`), new RegExp(`<a href="/${name}/" aria-current="page">Contents</a>`));
+  assert.doesNotMatch(read('index.html'), /aria-current/);
+});
+
+test('the scaffold command keeps the repository name in one piece', () => {
+  assert.match(read('index.html'), /<span class="nowrap">cevdetch\/astro-reels-template<\/span>/);
 });
 
 test('every page header links to the contents', () => {
@@ -268,7 +278,7 @@ test('the home page explains the template in its own words, before the first son
   const own = html.slice(html.indexOf('<main'), html.indexOf('<section class="card piece"'));
   const words = own.replace(/<[^>]+>/g, ' ').split(/\s+/).filter((w) => /\w/.test(w));
   assert.ok(words.length >= 250, `${words.length} words`);
-  assert.match(own, /<code>pnpm create astro@latest --template cevdetch\/astro-reels-template<\/code>/);
+  assert.match(own, /<code>pnpm create astro@latest --template <span class="nowrap">cevdetch\/astro-reels-template<\/span><\/code>/);
   assert.match(own, /Shakespeare&#39;s 154 sonnets|Shakespeare's 154 sonnets/);
   assert.match(own, new RegExp(`<a href="${esc(siteConfig.repository!)}">`));
   assert.match(own, new RegExp(`<a href="${esc(siteConfig.author!.url)}">Made by ${esc(siteConfig.author!.name)}</a>`));

@@ -8,8 +8,6 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
   return {
     /** The label and number, e.g. "Poem 18". */
     piece: (n: number) => `${label} ${n}`,
-    /** e.g. "Poem 18’s" */
-    pieceOwner: (n: number) => `${label} ${n}’s`,
     /** e.g. "poems 21–40" */
     range: (first: number, last: number) => `${plural} ${first}–${last}`,
     more: `More ${plural}`,

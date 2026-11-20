@@ -48,7 +48,7 @@ const { author, repository } = siteConfig;
   </head>
   <body class={Astro.props.bodyClass}>
     <header class="site">
-      <nav aria-label="Primary"><a href="/">{SITE_NAME}</a><a href={PIECES_PATH}>Contents</a></nav>
+      <nav aria-label="Primary"><a href="/">{SITE_NAME}</a><a href={PIECES_PATH} aria-current={Astro.url.pathname === PIECES_PATH ? 'page' : undefined}>Contents</a></nav>
     </header>
     <main id="main"><slot /></main>
     {(author || repository) && (
