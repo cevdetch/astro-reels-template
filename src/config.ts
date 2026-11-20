@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig & { pieces: typeof pieces } = {
   name: 'Astro Reels Template',
   tagline: 'a vertical feed with zero JavaScript',
   description: "A zero-JavaScript, reels-style vertical feed template for Astro: one piece per screen and a page for each, demoed with Shakespeare's 154 sonnets.",
-  origin: 'https://astro-reels-template.cevdet.ch',
+  origin: 'https://astro-reels-template.pages.dev',
   /** The path of feed page 1; later pages live at `<feedBase>page/<n>/`. */
   feedBase: '/',
   /** First feed card: one line under the name. */

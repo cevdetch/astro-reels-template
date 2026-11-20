@@ -3,6 +3,8 @@
 A reels-style feed of short pieces for [Astro](https://astro.build): one piece per screen, every
 piece with its own page, and no JavaScript. The demo is all 154 of Shakespeare's sonnets.
 
+**Live demo: [astro-reels-template.pages.dev](https://astro-reels-template.pages.dev/)**
+
 ![The feed's first card on a desktop screen, and Sonnet 18 on a phone](docs/screenshot.png)
 
 ## What you get
