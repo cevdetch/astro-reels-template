@@ -20,3 +20,8 @@ export function stanzas(body: string): VerseLine[][] {
   if (current.length) result.push(current);
   return result;
 }
+
+/** A piece's first line, the way a poem without a title is known; nothing for an empty body. */
+export function firstLine(body: string): string | undefined {
+  return stanzas(body)[0]?.[0]?.text;
+}

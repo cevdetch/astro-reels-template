@@ -3,7 +3,7 @@ import Intro from './Intro.astro';
 import PieceCard from './PieceCard.astro';
 import type { Piece } from '../lib/collection.ts';
 import { feedHref, pageCount, pageRange, PAGE_SIZE } from '../lib/feed.ts';
-import { pieceWords } from '../lib/pieces.ts';
+import { pieceWords, sharedCreator } from '../lib/pieces.ts';
 import { PIECES_PATH } from '../lib/seo.ts';
 import '../styles/feed.css';
 
@@ -36,7 +36,7 @@ const words = pieceWords();
     <section class="card end" aria-labelledby="the-end">
       <div class="poem">
         <h2 class="number" id="the-end">The end</h2>
-        <p class="closing">{words.closing(total)}</p>
+        <p class="closing">{words.closing(total, sharedCreator(pieces.map((piece) => piece.data)))}</p>
         <nav class="card-links" aria-label="After the last"><a href={PIECES_PATH}>Contents →</a><a href={feedHref(1)}>Start again ↑</a></nav>
       </div>
     </section>

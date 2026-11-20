@@ -20,8 +20,8 @@ export function pieceWords({ label, plural, creator }: Words = siteConfig.pieces
     /** e.g. "All poems" */
     all: `All ${plural}`,
     contentsHeading: Plural,
-    /** The closing card's line, e.g. "All 40 poems, by A. Poet." */
-    closing: (total: number) => `All ${total} ${plural}, by ${creator}.`,
+    /** The closing card's line, e.g. "All 40 poems, by A. Poet.", without "by" when the pieces have no one creator. */
+    closing: (total: number, by: string | undefined) => (by ? `All ${total} ${plural}, by ${by}.` : `All ${total} ${plural}.`),
     contentsDescription: (total: number) => `All ${total} ${plural} by ${creator}, each with its first line or title.`,
   };
 }
@@ -34,6 +34,12 @@ export function ownTitle(title: string, n: number, { label }: Pick<SiteConfig['p
 /** Who made a piece: its own `creator`, or the one in the config. */
 export function creatorOf(data: { creator?: string | undefined }, { creator }: Pick<SiteConfig['pieces'], 'creator'> = siteConfig.pieces): string {
   return data.creator ?? creator;
+}
+
+/** The creator every piece shares, or nothing when some piece names someone else. */
+export function sharedCreator(pieces: readonly { creator?: string | undefined }[], config: Pick<SiteConfig['pieces'], 'creator'> = siteConfig.pieces): string | undefined {
+  const creators = new Set(pieces.map((data) => creatorOf(data, config)));
+  return creators.size === 1 ? [...creators][0] : undefined;
 }
 
 /** A piece's own page: /<name>/<n>/. */

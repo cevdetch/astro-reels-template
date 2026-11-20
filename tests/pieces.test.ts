@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { siteConfig } from '../src/config.ts';
-import { creatorOf, orderPieces, ownTitle, pieceNameProblem, pieceWords, piecePath } from '../src/lib/pieces.ts';
+import { creatorOf, orderPieces, ownTitle, pieceNameProblem, pieceWords, piecePath, sharedCreator } from '../src/lib/pieces.ts';
 
 test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   const words = pieceWords();
@@ -13,7 +13,7 @@ test('the demo words: Sonnet, sonnets, Shakespeare', () => {
   assert.equal(words.nextGroup, 'Next sonnets');
   assert.equal(words.pageDescription(21, 40, 154), "Sonnets 21 to 40 of William Shakespeare's 154, one per screen.");
   assert.equal(words.all, 'All sonnets');
-  assert.equal(words.closing(154), 'All 154 sonnets, by William Shakespeare.');
+  assert.equal(words.closing(154, 'William Shakespeare'), 'All 154 sonnets, by William Shakespeare.');
   assert.equal(words.contentsHeading, 'Sonnets');
   assert.equal(words.contentsDescription(154), "All 154 sonnets by William Shakespeare, each with its first line or title.");
 });
@@ -72,4 +72,16 @@ test('a title shows only when it says more than the label and number', () => {
 test("a piece's own creator wins over the config's", () => {
   assert.equal(creatorOf({}), siteConfig.pieces.creator);
   assert.equal(creatorOf({ creator: 'Ann Other' }), 'Ann Other');
+});
+
+test('the collection names one creator only when every piece shares it', () => {
+  assert.equal(sharedCreator([{}, {}], { creator: 'A. Poet' }), 'A. Poet');
+  assert.equal(sharedCreator([{}, { creator: 'A. Poet' }], { creator: 'A. Poet' }), 'A. Poet');
+  assert.equal(sharedCreator([{}, { creator: 'B. Guest' }], { creator: 'A. Poet' }), undefined);
+});
+
+test('the closing line names the creator only when there is one', () => {
+  const words = pieceWords({ label: 'Poem', plural: 'poems', creator: 'A. Poet' });
+  assert.equal(words.closing(3, 'A. Poet'), 'All 3 poems, by A. Poet.');
+  assert.equal(words.closing(3, undefined), 'All 3 poems.');
 });
