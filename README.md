@@ -60,13 +60,13 @@ and clone it.
 
 ## Make it yours
 
-1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`,
-   the line and credit on the welcome cards (leave `credit` out when you rewrite them), and
-   `feedBase` if the feed should live somewhere other than `/`. Set `author` to yourself (a name and the URL of your own site) and `repository` to
-   your source code: the footer of every page credits both, and the home page's `WebSite`
-   structured data names the author as its publisher. Either can be left out. Until you change
-   `author`, a build for an address outside cevdet.ch warns that the site still credits the
-   template's author.
+1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`, the
+   line and credit on the welcome cards (leave `credit` out when you rewrite them), and `feedBase`
+   if the feed should live somewhere other than `/`. Set `author` to yourself (a name and the URL
+   of your own site) and `repository` to your source code: the footer of every page credits both,
+   and the home page's `WebSite` structured data names the author as its publisher. Either can be
+   left out. Until you change `author`, a build for an address outside cevdet.ch warns that the
+   site still credits the template's author.
 2. **Search.** `indexPieces` in `src/config.ts` is `false`, which suits demo text or text that is
    already published elsewhere, such as the sonnets: each piece's page and the feed pages after
    the first carry `<meta name="robots" content="noindex, follow">` and are left out of the
