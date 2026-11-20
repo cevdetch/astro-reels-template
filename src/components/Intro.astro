@@ -28,7 +28,7 @@ const { name, intro, credit, author, repository } = siteConfig;
     <p>Then put your site's name, address and author in <code>src/config.ts</code>, add each piece as Markdown in <code>src/content/&lt;pieces.name&gt;/</code> and replace the icons in <code>public/</code>. <code>pnpm build</code> writes a static site that Cloudflare Pages, Netlify or GitHub Pages serve as it is.</p>
     <p>With no JavaScript, the feed works with scripts turned off and loads nothing it does not show. The trade-off: the address bar does not follow the scroll, so the link to share is each piece's own page.</p>
     <h2 id="demo-title">Demo content</h2>
-    <p>The pieces that follow are Shakespeare's 154 sonnets, first printed in 1609 and long in the public domain. <a href={credit.href}>{credit.text}</a>.</p>
+    <p>The pieces that follow are Shakespeare's 154 sonnets, first printed in 1609 and long in the public domain. {credit && <><a href={credit.href}>{credit.text}</a>.</>}</p>
     {(repository || author) && (
       <nav class="card-links" aria-label="About this template">
         {repository && <a href={repository}>Source code and documentation</a>}

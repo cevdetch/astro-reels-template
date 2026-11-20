@@ -33,13 +33,15 @@ share sheet; each piece's own page is the link to share.
 ## Requirements
 
 - Node.js 24.8.0 or newer
-- pnpm 12.3.4, pinned in `package.json`
+- pnpm, the version pinned in `package.json` (`packageManager`)
 
 ## Start a project
 
 ```sh
-pnpm create astro@latest --template cevdetch/astro-reels-template
+pnpm create astro@latest my-site --template cevdetch/astro-reels-template
 ```
+
+`my-site` is the folder to create. Add `--install --git --yes` to skip the questions.
 
 Or create a repository with [Use this template](https://github.com/cevdetch/astro-reels-template/generate)
 and clone it.
@@ -59,8 +61,8 @@ and clone it.
 ## Make it yours
 
 1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`,
-   the line and credit on the welcome cards, and `feedBase` if the feed should live somewhere other
-   than `/`. Set `author` to yourself (a name and the URL of your own site) and `repository` to
+   the line and credit on the welcome cards (leave `credit` out when you rewrite them), and
+   `feedBase` if the feed should live somewhere other than `/`. Set `author` to yourself (a name and the URL of your own site) and `repository` to
    your source code: the footer of every page credits both, and the home page's `WebSite`
    structured data names the author as its publisher. Either can be left out. Until you change
    `author`, a build for an address outside cevdet.ch warns that the site still credits the
@@ -92,7 +94,8 @@ and clone it.
    `number` sets the order. `title` is the page title, and it is shown as the piece's heading
    when it says more than "Sonnet 18". `creator` is optional: it names a piece's own author,
    shown on the piece and in its structured data, in place of `pieces.creator`.
-   `description` (up to 160 characters) is the search snippet, and every
+   `description` (up to 160 characters) is the search snippet. The contents page lists each piece
+   by its title, or by its first line when the title is only "Sonnet 18". Every
    line of the body is a line on the page. Start a line with two spaces or two em spaces to
    indent it; a blank line starts a new stanza. The body is shown as plain lines, not formatted
    Markdown.
@@ -162,4 +165,5 @@ What a fork must set before launch:
 
 ## License
 
-The code is MIT licensed; see `LICENSE`.
+The code is MIT licensed; see `LICENSE`. If you build on it, keep that copyright notice (the MIT
+licence asks for it) and add your own line for your changes.

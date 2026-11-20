@@ -258,7 +258,9 @@ test('no page ships JavaScript', () => {
 test('the welcome cards take their line and source credit from the config', () => {
   const html = read('index.html');
   assert.match(html, new RegExp(`<p class="lead">${esc(siteConfig.intro.replace(/'/g, '&#39;'))}</p>|<p class="lead">${esc(siteConfig.intro)}</p>`));
-  assert.match(html, new RegExp(`<a href="${esc(siteConfig.credit.href)}"[^>]*>${esc(siteConfig.credit.text)}</a>`));
+  const { credit } = siteConfig;
+  assert.ok(credit);
+  assert.match(html, new RegExp(`<a href="${esc(credit.href)}"[^>]*>${esc(credit.text)}</a>`));
 });
 
 test('the home page explains the template in its own words, before the first sonnet', () => {

@@ -5,12 +5,13 @@ import type { PersonRef } from './lib/structured-data.ts';
 
 /**
  * What the pieces are called and who made them. `name` is the content folder
- * (src/content/sonnets/), the collection and the URL segment (/sonnets/18/): lowercase letters,
+ * (src/content/<name>/), the collection and the URL segment (/<name>/18/): lowercase letters,
  * digits and hyphens, starting with a letter, and neither "page", which the feed's own pages use,
- * nor the first part of `feedBase`. A piece's page is headed "Sonnet 18" and signed with the
- * creator, who is also the author in its structured data; links and page cards say
- * "sonnets 21–40". `plural` is written as it reads mid-sentence. `book` is the book the pieces
- * come from, named in each piece's structured data; leave it out when they belong to none.
+ * nor the first part of `feedBase`. With `label: 'Poem'`, a piece's page is headed "Poem 18" and
+ * signed with the creator, who is also the author in its structured data; with `plural: 'poems'`,
+ * links and page cards say "poems 21–40" (write it as it reads mid-sentence). `book` is the book
+ * the pieces come from, named in each piece's structured data; leave it out when they belong to
+ * none. The values below are the demo's.
  */
 const pieces = {
   name: 'sonnets',
@@ -29,14 +30,14 @@ export const siteConfig: SiteConfig & { pieces: typeof pieces } = {
   feedBase: '/',
   /** First feed card: one line under the name. */
   intro: 'A reels-style vertical feed for Astro: one piece per screen, a page of its own for every piece, and not a line of JavaScript.',
-  /** Credit for the content, shown on the welcome cards. */
+  /** Credit for the demo's content, shown on the welcome cards; leave it out with your own cards. */
   credit: { text: 'Text from Project Gutenberg', href: 'https://www.gutenberg.org/ebooks/1041' },
   pieces,
   /**
    * Whether search engines index each piece's page and the feed pages after the first. Leave it
-   * false for demo text or text published elsewhere, such as these sonnets: those pages then carry
-   * `noindex, follow` and stay out of the sitemap, so only the first feed page is indexed. Set it
-   * true when the pieces are your own.
+   * false for demo text or text published elsewhere, such as the demo's sonnets: those pages then
+   * carry `noindex, follow` and stay out of the sitemap, so only the first feed page is indexed.
+   * Set it true when the pieces are your own.
    */
   indexPieces: false,
   /**
@@ -56,7 +57,7 @@ export interface SiteConfig {
   origin: string;
   feedBase: string;
   intro: string;
-  credit: { text: string; href: string };
+  credit?: { text: string; href: string };
   pieces: { name: string; label: string; plural: string; creator: string; book?: { name: string; datePublished?: string } };
   indexPieces: boolean;
   /** `url` is your home page; `<url>#person` identifies you in the structured data unless you set `id`. */
