@@ -3,7 +3,7 @@
 // home page, so say what your site is here, in your own words.
 import { siteConfig } from '../config.ts';
 
-const { name, intro, credit, author, repository } = siteConfig;
+const { name, intro, credit, repository } = siteConfig;
 ---
 
 <section class="card intro" aria-labelledby="intro-title">
@@ -29,10 +29,9 @@ const { name, intro, credit, author, repository } = siteConfig;
     <p>It suits any collection read one piece at a time: poems, quotes, aphorisms, art captions or short prose. Each piece gets a screen in the feed, a page of its own to share and a line in the contents, and readers need nothing but a browser, not even JavaScript.</p>
     <h2 id="demo-title">Demo content</h2>
     <p>The pieces that follow are Shakespeare's 154 sonnets, first printed in 1609 and long in the public domain. {credit && <><a href={credit.href}>{credit.text}</a>.</>}</p>
-    {(repository || author) && (
+    {repository && (
       <nav class="card-links" aria-label="About this template">
-        {repository && <a href={repository}>The source code and documentation</a>}
-        {author && <a href={author.url}>Made by {author.name}</a>}
+        <a href={repository}>The source code and documentation</a>
       </nav>
     )}
   </div>

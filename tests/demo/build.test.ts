@@ -68,9 +68,10 @@ test('Sonnet 18 is a CreativeWork by William Shakespeare, part of the 1609 Sonne
   }]);
 });
 
-test('the demo credits no author', { skip }, () => {
-  assert.equal(siteConfig.author, undefined);
-  assert.equal('publisher' in jsonLd('index.html')[0]!, false);
+test('the demo credits a placeholder author on example.com', { skip }, () => {
+  assert.deepEqual(siteConfig.author, { name: 'Your Name', url: 'https://example.com/' });
+  assert.match(read('index.html'), /<footer class="site"><p>By <a href="https:\/\/example\.com\/">Your Name<\/a> · <a href="https:\/\/github\.com\/cevdetch\/astro-reels-template">Source code<\/a><\/p><\/footer>/);
+  assert.deepEqual(jsonLd('index.html')[0]!['publisher'], { '@type': 'Person', '@id': 'https://example.com/#person', name: 'Your Name', url: 'https://example.com/' });
 });
 
 /** The welcome cards: everything in <main> before the first piece. */

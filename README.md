@@ -68,10 +68,11 @@ skips itself once `pieces.name` is no longer `sonnets`.
 
 1. **Site details.** Edit `src/config.ts`: the name, tagline, description, production `origin`, the
    line and credit on the welcome cards (leave `credit` out when you rewrite them), and `feedBase`
-   if the feed should live somewhere other than `/`. `repository` is your source code, linked from
-   every page's footer. `author` is commented out in the demo: set it to yourself (a name and the
-   URL of your own site) and the footer credits you too, and the home page's `WebSite` structured
-   data names you as its publisher. Either can be left out.
+   if the feed should live somewhere other than `/`. `author` is a placeholder in the demo
+   (`Your Name`, `https://example.com/`): set it to yourself, a name and the URL of your own site,
+   and every page's footer credits you and the home page's `WebSite` structured data names you as
+   its publisher. `repository` is your source code, linked from the footer. Either can be left
+   out.
 2. **Search.** `indexPieces` in `src/config.ts` is `false`, which suits demo text or text that is
    already published elsewhere, such as the sonnets: each piece's page and the feed pages after
    the first carry `<meta name="robots" content="noindex, follow">` and are left out of the
