@@ -65,8 +65,7 @@ and clone it.
    if the feed should live somewhere other than `/`. Set `author` to yourself (a name and the URL
    of your own site) and `repository` to your source code: the footer of every page credits both,
    and the home page's `WebSite` structured data names the author as its publisher. Either can be
-   left out. Until you change `author`, a build for an address outside cevdet.ch warns that the
-   site still credits the template's author.
+   left out.
 2. **Search.** `indexPieces` in `src/config.ts` is `false`, which suits demo text or text that is
    already published elsewhere, such as the sonnets: each piece's page and the feed pages after
    the first carry `<meta name="robots" content="noindex, follow">` and are left out of the
@@ -126,10 +125,9 @@ What the template does for search:
   and `twitter:card`. Each names Astro as its generator (`<meta name="generator">`).
 - The home page carries `WebSite` structured data with the author as publisher; each piece's page
   carries `CreativeWork` with the piece's own author and book. `src/lib/identity.ts` assembles
-  them from the builders in `src/lib/structured-data.ts`, which the template shares with the other
-  cevdet.ch sites and types with [schema-dts](https://github.com/google/schema-dts). A page's
-  markup is one JSON-LD script holding an `@graph`, with `<` escaped so the data cannot close the
-  element.
+  them from the builders in `src/lib/structured-data.ts`, typed with
+  [schema-dts](https://github.com/google/schema-dts). A page's markup is one JSON-LD script
+  holding an `@graph`, with `<` escaped so the data cannot close the element.
 - `robots.txt` allows crawling and names the sitemap index. The sitemap lists only pages meant for
   search.
 - The 404 page is served as `404.html`, `noindex` and without a canonical.
@@ -146,8 +144,7 @@ What a fork must set before launch:
 
 1. `origin` in `src/config.ts`: canonicals, the sitemap, `robots.txt` and share images use it.
 2. `name`, `tagline` and `description`, written for the people searching for your site.
-3. `author` and `repository`, or remove them. The build warns while `author` still credits
-   cevdet.ch from another address.
+3. `author` and `repository`, or remove them.
 4. `indexPieces`, as above.
 5. The welcome cards in `src/components/Intro.astro`, and `pieces` in `src/config.ts` (including
    its `book`) with your content folder renamed to match.

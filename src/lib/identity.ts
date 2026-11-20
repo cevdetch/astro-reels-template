@@ -5,7 +5,7 @@ import { creativeWorkNode, graph, serializeJsonLd, websiteNode } from './structu
 /** The home page's WebSite, published by the configured author; with no author, it names no publisher. */
 export function homeJsonLd(origin: URL, { author }: Pick<SiteConfig, 'author'> = siteConfig): string {
   return serializeJsonLd(graph(websiteNode({
-    url: new URL('/', origin).href, name: SITE_NAME, inLanguage: 'en', publisher: author ?? null,
+    url: new URL('/', origin).href, name: SITE_NAME, inLanguage: 'en', publisher: author,
   })));
 }
 

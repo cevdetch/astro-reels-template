@@ -1,7 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { siteConfig } from '../src/config.ts';
-import { authorCreditWarning } from '../src/integrations/author-credit.ts';
 import { homeJsonLd, pieceJsonLd } from '../src/lib/identity.ts';
 import { SITE_NAME } from '../src/lib/seo.ts';
 
@@ -63,13 +62,4 @@ test('a "<" in the data cannot close the script element', () => {
   const json = pieceJsonLd({ url: 'https://example.test/sonnets/1/', name: '</script>', description: 'a < b' });
   assert.doesNotMatch(json, /</);
   assert.equal(nodes(json)[0]?.['name'], '</script>');
-});
-
-test('a fork outside cevdet.ch that still credits cevdet.ch gets a warning', () => {
-  const { author } = siteConfig;
-  assert.equal(authorCreditWarning('https://astro-reels-template.cevdet.ch', author), undefined);
-  assert.equal(authorCreditWarning('https://cevdet.ch', author), undefined);
-  assert.match(authorCreditWarning('https://poems.example', author) ?? '', /^poems\.example still credits .+ \(https:\/\/cevdet\.ch\/\)/);
-  assert.equal(authorCreditWarning('https://poems.example', { name: 'A. Writer', url: 'https://poems.example/' }), undefined);
-  assert.equal(authorCreditWarning('https://poems.example', undefined), undefined);
 });
