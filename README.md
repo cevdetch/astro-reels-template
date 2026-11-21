@@ -27,7 +27,7 @@ piece with its own page, and no JavaScript. The demo is all 154 of Shakespeare's
   `indexPieces` below). The 404 page is `noindex`.
 - **Accessible and fast.** Light and dark colours checked for contrast by a test, visible focus,
   no web fonts, and off-screen cards skipped by `content-visibility`. Lighthouse scores 100 for
-  accessibility, best practices and SEO.
+  accessibility and best practices, and 100 for SEO on every page meant for search.
 
 No page ships JavaScript, so the address bar does not follow the scroll and there is no native
 share sheet; each piece's own page is the link to share.
@@ -63,6 +63,35 @@ and clone it.
 The tests in `tests/` hold for any site built from the template: they take their expectations
 from `src/config.ts` and your content folder. `tests/demo/` checks the demo word for word and
 skips itself once `pieces.name` is no longer `sonnets`.
+
+## Project structure
+
+```text
+src/
+├── config.ts                  Site details, the pieces' names, author, search: start here
+├── content.config.ts          The pieces collection and its front matter
+├── content/sonnets/           One Markdown file per piece (the folder pieces.name names)
+├── components/
+│   ├── Intro.astro            The welcome cards before the first piece
+│   ├── FeedPage.astro         A feed page: pieces, page-turn cards, the closing card
+│   └── PieceCard.astro        One piece, in the feed or on its own page
+├── layouts/Layout.astro       Every page's <head>, header and footer
+├── pages/
+│   ├── index.astro            Feed page 1
+│   ├── page/[page].astro      Feed pages 2 and on: /page/2/
+│   ├── [section]/index.astro  The contents: /sonnets/
+│   ├── [section]/[number].astro  A piece's own page: /sonnets/18/
+│   ├── 404.astro
+│   ├── robots.txt.ts
+│   └── site.webmanifest.ts
+├── lib/                       Paging, the pieces' words, SEO, structured data, verse lines
+├── integrations/              Share images, rendered after the build
+├── styles/site.css            The stylesheet: base.css (colours, type) and feed.css (cards)
+└── assets/social-fonts/       Noto Sans, for share images only
+public/                        Icons
+scripts/                       The demo's import from Project Gutenberg
+tests/                         Checks for any fork; tests/demo/ checks the demo
+```
 
 ## Make it yours
 
