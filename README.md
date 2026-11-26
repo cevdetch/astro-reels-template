@@ -35,12 +35,12 @@ share sheet; each piece's own page is the link to share.
 ## Requirements
 
 - Node.js 24.8.0 or newer
-- pnpm, the version pinned in `package.json` (`packageManager`)
+- Bun, the version pinned in `package.json` (`packageManager`)
 
 ## Start a project
 
 ```sh
-pnpm create astro@latest my-site --template cevdetch/astro-reels-template
+bun create astro@latest my-site --template cevdetch/astro-reels-template
 ```
 
 `my-site` is the folder to create. Add `--install --git --yes` to skip the questions.
@@ -52,13 +52,13 @@ and clone it.
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm install --frozen-lockfile` | Install dependencies |
-| `pnpm dev` | Local dev server |
-| `pnpm check` | Astro and TypeScript checks |
-| `pnpm build` | Build the static site into `dist/` |
-| `pnpm test` | Unit tests, and checks of the last build |
-| `pnpm lint:html` | Audit `dist/` with [deadhead](https://www.npmjs.com/package/deadhead) |
-| `pnpm verify` | All of the above, in order |
+| `bun install --frozen-lockfile` | Install dependencies |
+| `bun run dev` | Local dev server |
+| `bun run check` | Astro and TypeScript checks |
+| `bun run build` | Build the static site into `dist/` |
+| `bun run test` | Unit tests, and checks of the last build |
+| `bun run lint:html` | Audit `dist/` with [deadhead](https://www.npmjs.com/package/deadhead) |
+| `bun run verify` | All of the above, in order |
 
 The tests in `tests/` hold for any site built from the template: they take their expectations
 from `src/config.ts` and your content folder. `tests/demo/` checks the demo word for word and
@@ -151,7 +151,7 @@ tests/                         Checks for any fork; tests/demo/ checks the demo
 
 ## Deploy
 
-`pnpm build` writes a static site to `dist/`. Every URL ends in a slash (`/sonnets/18/`), which
+`bun run build` writes a static site to `dist/`. Every URL ends in a slash (`/sonnets/18/`), which
 static hosts such as Cloudflare Pages, Netlify and GitHub Pages serve from `index.html` files.
 Set `origin` in `src/config.ts` to the production address first: canonicals, the sitemap and
 share images use it.
@@ -172,7 +172,7 @@ What the template does for search:
 - `robots.txt` allows crawling and names the sitemap index. The sitemap lists only pages meant for
   search.
 - The 404 page is served as `404.html`, `noindex` and without a canonical.
-- Every page reads in full without JavaScript, and `pnpm lint:html` audits the built HTML.
+- Every page reads in full without JavaScript, and `bun run lint:html` audits the built HTML.
 - Every `<head>` is in [capo.js](https://rviscomi.github.io/capo.js/) order: charset and
   viewport, the title, the stylesheet, then everything else, which a test checks. The layout links
   `src/styles/site.css` itself, so add styles there or in the files it imports.
@@ -192,7 +192,7 @@ What a fork must set before launch:
 4. `indexPieces`, as above.
 5. The welcome cards in `src/components/Intro.astro`, and `pieces` in `src/config.ts` (including
    its `book`) with your content folder renamed to match.
-6. Run `pnpm verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
+6. Run `bun run verify`, deploy, then submit `/sitemap-index.xml` to Google Search Console and Bing
    Webmaster Tools.
 
 ## Acknowledgements

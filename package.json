@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "license": "MIT",
-  "packageManager": "pnpm@12.21.0",
+  "packageManager": "bun@1.4.5",
   "engines": {
     "node": ">=24.8.0"
   },
@@ -11,9 +11,9 @@
     "dev": "astro dev",
     "check": "astro check",
     "build": "astro build",
-    "test": "node --test 'tests/**/*.test.ts'",
+    "test": "bun test",
     "lint:html": "deadhead dist",
-    "verify": "pnpm check && pnpm build && pnpm test && pnpm lint:html",
+    "verify": "bun --bun run check && bun --bun run build && bun --bun run test && bun --bun run lint:html",
     "preview": "astro preview",
     "astro": "astro"
   },

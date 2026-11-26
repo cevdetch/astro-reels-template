@@ -19,7 +19,7 @@ export const attr = (s: string) => s.replaceAll('&', '&amp;').replaceAll('"', '&
 /** A built file, failing with a hint when there is no build. */
 export const read = (path: string): string => {
   const file = new URL(path, dist);
-  assert.ok(existsSync(file), `dist/${path} is missing; run pnpm build first`);
+  assert.ok(existsSync(file), `dist/${path} is missing; run bun run build first`);
   return readFileSync(file, 'utf8');
 };
 

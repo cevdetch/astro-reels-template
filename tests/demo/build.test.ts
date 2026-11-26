@@ -92,7 +92,7 @@ test('the home page explains the template in its own words, before the first son
   const own = welcome();
   const words = text(own.replace(/<[^>]+>/g, ' ')).split(' ').filter((w) => /\w/.test(w));
   assert.ok(words.length >= 250, `${words.length} words`);
-  assert.match(own, /<code>pnpm create astro@latest --template <span class="nowrap">cevdetch\/astro-reels-template<\/span><\/code>/);
+  assert.match(own, /<code>bun create astro@latest --template <span class="nowrap">cevdetch\/astro-reels-template<\/span><\/code>/);
   assert.match(own, /Shakespeare's 154 sonnets/);
   assert.match(own, new RegExp(`<a href="${esc(siteConfig.repository!)}">The source code and documentation</a>`));
   assert.doesNotMatch(own, /Made by/);
